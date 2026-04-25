@@ -8,6 +8,7 @@ export default function AdvancedDashboard() {
   const [activeTab, setActiveTab] = useState('logs');
   const [newPassword, setNewPassword] = useState('');
   const [expandedId, setExpandedId] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -66,9 +67,25 @@ export default function AdvancedDashboard() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0a0c10] text-slate-300 font-sans">
+    <div className="flex min-h-screen bg-[#0a0c10] text-slate-300 font-sans relative overflow-x-hidden">
+      {/* Mobile Toggle Button */}
+      <button
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className="md:hidden fixed bottom-6 right-6 z-50 bg-red-600 text-white p-4 rounded-full shadow-2xl active:scale-95 transition-all"
+      >
+        {isSidebarOpen ? (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        ) : (
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+        )}
+      </button>
+
       {/* Sidebar */}
-      <aside className="w-64 shrink-0 bg-[#0f1218] border-r border-slate-800 flex flex-col">
+      <aside className={`
+        fixed inset-y-0 left-0 z-40 w-64 bg-[#0f1218] border-r border-slate-800 flex flex-col transition-transform duration-300 transform
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+        md:relative md:translate-x-0 md:flex md:shrink-0
+      `}>
         <div className="p-6 border-b border-slate-800 flex items-center gap-3">
           <div className="w-2 h-2 bg-red-600 rounded-full" />
           <h1 className="text-lg font-black text-white uppercase tracking-tighter">
@@ -79,17 +96,15 @@ export default function AdvancedDashboard() {
         <nav className="flex-grow p-4 space-y-1">
           <button
             onClick={() => setActiveTab('logs')}
-            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${
-              activeTab === 'logs' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
-            }`}
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'logs' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
+              }`}
           >
             Leads
           </button>
           <button
             onClick={() => setActiveTab('security')}
-            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${
-              activeTab === 'security' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
-            }`}
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'security' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
+              }`}
           >
             Settings
           </button>
@@ -104,6 +119,14 @@ export default function AdvancedDashboard() {
           </button>
         </div>
       </aside>
+
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
 
       {/* Main Content */}
       <main className="flex-grow p-8 overflow-y-auto min-w-0">
