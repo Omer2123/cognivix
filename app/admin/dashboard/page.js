@@ -53,6 +53,18 @@ export default function AdvancedDashboard() {
 
   const toggleRow = (id) => setExpandedId((prev) => (prev === id ? null : id));
 
+  const deleteLead = async (e, id) => {
+    e.stopPropagation();
+    if (!confirm('Delete this lead? This cannot be undone.')) return;
+    await fetch('/api/admin/inquiries', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    setInquiries((prev) => prev.filter((i) => i._id !== id));
+    if (expandedId === id) setExpandedId(null);
+  };
+
   return (
     <div className="flex min-h-screen bg-[#0a0c10] text-slate-300 font-sans">
       {/* Sidebar */}
@@ -146,6 +158,7 @@ export default function AdvancedDashboard() {
                         <th className="px-5 py-4">Sector</th>
                         <th className="px-5 py-4">Message</th>
                         <th className="px-5 py-4">Date</th>
+                        <th className="px-5 py-4"></th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/60">
@@ -173,11 +186,22 @@ export default function AdvancedDashboard() {
                                 year: 'numeric',
                               })}
                             </td>
+                            <td className="px-5 py-4 text-right">
+                              <button
+                                onClick={(e) => deleteLead(e, iq._id)}
+                                className="text-slate-600 hover:text-red-500 transition p-1 rounded"
+                                title="Delete lead"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                            </td>
                           </tr>
 
                           {expandedId === iq._id && (
                             <tr key={`${iq._id}-expanded`} className="bg-slate-900/40">
-                              <td colSpan={5} className="px-5 py-5">
+                              <td colSpan={6} className="px-5 py-5">
                                 <div className="flex gap-3 items-start">
                                   <div className="w-1 self-stretch bg-red-600 rounded-full shrink-0" />
                                   <div>
