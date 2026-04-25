@@ -6,8 +6,9 @@ import { hashPassword, verifyToken } from '@/lib/auth';
 
 export async function POST(req) {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('admin_token')?.value;
+
 
     if (!token) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
