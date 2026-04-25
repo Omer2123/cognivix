@@ -11,3 +11,14 @@ export async function GET() {
     return NextResponse.json({ success: false, error: 'Failed to fetch' }, { status: 500 });
   }
 }
+
+export async function DELETE(req) {
+  try {
+    await connectToDatabase();
+    const { id } = await req.json();
+    await Inquiry.findByIdAndDelete(id);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: 'Failed to delete' }, { status: 500 });
+  }
+}

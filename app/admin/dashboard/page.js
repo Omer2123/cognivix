@@ -53,12 +53,24 @@ export default function AdvancedDashboard() {
 
   const toggleRow = (id) => setExpandedId((prev) => (prev === id ? null : id));
 
+  const deleteLead = async (e, id) => {
+    e.stopPropagation();
+    if (!confirm('Delete this lead? This cannot be undone.')) return;
+    await fetch('/api/admin/inquiries', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    setInquiries((prev) => prev.filter((i) => i._id !== id));
+    if (expandedId === id) setExpandedId(null);
+  };
+
   return (
     <div className="flex min-h-screen bg-[#0a0c10] text-slate-300 font-sans">
       {/* Sidebar */}
       <aside className="w-64 shrink-0 bg-[#0f1218] border-r border-slate-800 flex flex-col">
         <div className="p-6 border-b border-slate-800 flex items-center gap-3">
-          <div className="w-2.5 h-2.5 bg-red-600 rounded-full animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.8)]" />
+          <div className="w-2 h-2 bg-red-600 rounded-full" />
           <h1 className="text-lg font-black text-white uppercase tracking-tighter">
             Cognivix <span className="text-red-600">Admin</span>
           </h1>
@@ -67,19 +79,19 @@ export default function AdvancedDashboard() {
         <nav className="flex-grow p-4 space-y-1">
           <button
             onClick={() => setActiveTab('logs')}
-            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition ${
-              activeTab === 'logs' ? 'bg-red-600 text-white' : 'hover:bg-slate-800 text-slate-500'
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${
+              activeTab === 'logs' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
             }`}
           >
             Leads
           </button>
           <button
             onClick={() => setActiveTab('security')}
-            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition ${
-              activeTab === 'security' ? 'bg-red-600 text-white' : 'hover:bg-slate-800 text-slate-500'
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${
+              activeTab === 'security' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
             }`}
           >
-            Access Control
+            Settings
           </button>
         </nav>
 
@@ -146,6 +158,7 @@ export default function AdvancedDashboard() {
                         <th className="px-5 py-4">Sector</th>
                         <th className="px-5 py-4">Message</th>
                         <th className="px-5 py-4">Date</th>
+                        <th className="px-5 py-4"></th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/60">
@@ -159,7 +172,7 @@ export default function AdvancedDashboard() {
                             <td className="px-5 py-4 text-white font-bold whitespace-nowrap">{iq.name}</td>
                             <td className="px-5 py-4 text-red-400 font-mono text-xs whitespace-nowrap">{iq.email}</td>
                             <td className="px-5 py-4 whitespace-nowrap">
-                              <span className="bg-red-600/10 text-red-400 text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border border-red-600/20">
+                              <span className="bg-red-600/10 text-red-400 text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded border border-red-600/20">
                                 {iq.serviceCategory || '—'}
                               </span>
                             </td>
@@ -173,11 +186,22 @@ export default function AdvancedDashboard() {
                                 year: 'numeric',
                               })}
                             </td>
+                            <td className="px-5 py-4 text-right">
+                              <button
+                                onClick={(e) => deleteLead(e, iq._id)}
+                                className="text-slate-600 hover:text-red-500 transition p-1 rounded"
+                                title="Delete lead"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                            </td>
                           </tr>
 
                           {expandedId === iq._id && (
                             <tr key={`${iq._id}-expanded`} className="bg-slate-900/40">
-                              <td colSpan={5} className="px-5 py-5">
+                              <td colSpan={6} className="px-5 py-5">
                                 <div className="flex gap-3 items-start">
                                   <div className="w-1 self-stretch bg-red-600 rounded-full shrink-0" />
                                   <div>

@@ -59,14 +59,14 @@ export default function Services() {
                 <h3 className="text-xl font-black text-white uppercase tracking-tight mb-4 group-hover:text-red-600 transition">
                   {service.title}
                 </h3>
-                <p className="text-slate-400 text-xs leading-relaxed mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <p className="text-slate-400 text-xs leading-relaxed mb-6 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-500">
                   {service.desc}
                 </p>
                 
                 {/* Tech Tags */}
                 <div className="flex flex-wrap gap-2 mb-8">
                   {service.tags.map(tag => (
-                    <span key={tag} className="text-[8px] font-black uppercase tracking-widest bg-red-600/10 text-red-500 border border-red-600/20 px-2 py-1 rounded">
+                    <span key={tag} className="text-[10px] font-black uppercase tracking-widest bg-red-600/10 text-red-500 border border-red-600/20 px-2 py-1 rounded">
                       {tag}
                     </span>
                   ))}

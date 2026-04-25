@@ -25,17 +25,17 @@ export default function Footer() {
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">16 Mystic LN Malvern, Pennsylvania 19355-1942, United States</p>
           <p className="text-[12px] font-bold text-red-600 uppercase tracking-widest mt-2 underline">info@cognivix.in</p>
     <p className="text-[12px] font-bold text-red-600 uppercase tracking-widest mt-2 underline">hr@cognivix.in</p>
-    // <p className="text-[12px] font-bold text-red-600 uppercase tracking-widest mt-2 underline">sales@cognivix.in</p>
+    {/* <p className="text-[12px] font-bold text-red-600 uppercase tracking-widest mt-2 underline">sales@cognivix.in</p> */}
      <p className="text-[12px] font-bold text-red-600 uppercase tracking-widest mt-2 underline">+13129129535</p>
         </div>
       </div>
 
       {/* Attribution & Legal Strip */}
-      <div className="max-w-7xl mx-auto px-6 pt-10 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-6 text-[8px] font-black text-slate-600 uppercase tracking-[0.3em]">
+      <div className="max-w-7xl mx-auto px-6 pt-10 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-6 text-[8px] font-black text-slate-600 uppercase tracking-[0.3em]">
         <div className="flex flex-col gap-2">
           <span>© 2026 Cognivix Strategic Operations</span>
            <span className="text-slate-700">
-            Developed by <a href="www.cognivix.in" target="_blank" className="text-red-600/50 hover:text-red-600 transition underline">Cognivix It Solutions
+            Developed by <a href="https://www.cognivix.in" target="_blank" className="text-red-600/50 hover:text-red-600 transition underline">Cognivix It Solutions
 2026 Copyright ©️</a>
           </span>
   {/* <span className="text-slate-700">

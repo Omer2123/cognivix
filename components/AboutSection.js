@@ -1,6 +1,6 @@
 export default function AboutSection() {
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-20 bg-white">
       <div className="container mx-auto px-6">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           
@@ -12,7 +12,7 @@ export default function AboutSection() {
               className="rounded-lg shadow-2xl grayscale hover:grayscale-0 transition duration-500"
             />
             <div className="absolute bottom-6 left-6 bg-red-600 text-white p-6 rounded-md shadow-lg">
-              <h3 className="text-3xl font-bold italic uppercase">About Us</h3>
+              <h3 className="text-3xl font-black uppercase">About Us</h3>
               <p className="text-sm">Your Trusted GovCon Partner</p>
             </div>
           </div>
