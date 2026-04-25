@@ -1,6 +1,5 @@
 import './globals.css';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import SiteShell from '@/components/SiteShell';
 
 export const metadata = {
   title: 'Cognivix IT Solutions | Federal Strategy',
@@ -11,9 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <body className="bg-[#0a0c10] antialiased">
-        <Navbar />
-        {children}
-        <Footer />
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );
