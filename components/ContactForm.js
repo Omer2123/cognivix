@@ -21,7 +21,35 @@ export default function ContactForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('transmitting');
-    setTimeout(() => setStatus('secured'), 2000);
+
+    const formData = new FormData(e.target);
+    const body = {
+      name: formData.get('name'),
+      email: formData.get('email'),
+      serviceCategory: formData.get('serviceCategory'),
+      message: formData.get('message'),
+    };
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Submission failed');
+      }
+
+      setStatus('secured');
+      setTimeout(() => {
+        window.location.href = '/contact/success';
+      }, 1000);
+    } catch (err) {
+      console.error(err);
+      setStatus('error');
+    }
   };
 
   return (
@@ -78,8 +106,8 @@ export default function ContactForm() {
             <div className="space-y-2">
               <label className="text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-widest block text-center">Operational Sector</label>
               <div className="relative">
-                <select 
-                  name="sector"
+                <select
+                  name="serviceCategory"
                   className="w-full bg-[#151921] border-2 border-red-600/30 text-white p-4 md:p-5 rounded-xl md:rounded-2xl focus:border-red-600 outline-none transition-all text-sm appearance-none cursor-pointer font-bold tracking-tight"
                 >
                   {sectors.map((s) => (
@@ -107,9 +135,9 @@ export default function ContactForm() {
             <button 
               type="submit" 
               className="w-full bg-red-600 hover:bg-red-700 text-white font-black uppercase tracking-[0.3em] md:tracking-[0.4em] py-5 md:py-7 rounded-xl md:rounded-2xl transition-all shadow-[0_20px_40px_-10px_rgba(220,38,38,0.4)] hover:scale-[1.01] active:scale-[0.98] disabled:bg-slate-800 text-[10px] md:text-sm"
-              disabled={status === 'transmitting'}
+              disabled={status === 'transmitting' || status === 'secured'}
             >
-              {status === 'transmitting' ? 'Transmitting...' : status === 'secured' ? 'Submission Secured' : 'Initiate Submission'}
+              {status === 'transmitting' ? 'Transmitting...' : status === 'secured' ? 'Submission Secured' : status === 'error' ? 'Transmission Failed — Retry' : 'Initiate Submission'}
             </button>
           </form>
         </div>
