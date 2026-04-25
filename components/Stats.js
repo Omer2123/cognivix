@@ -10,7 +10,7 @@ export default function Stats() {
   return (
     <section className="bg-slate-900 py-24 text-white">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 text-center">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 text-center">
           {stats.map((stat, i) => (
             <div key={i} className="space-y-2 group">
               <div className="text-5xl md:text-6xl font-black text-red-600 transition-transform group-hover:scale-110 duration-300">

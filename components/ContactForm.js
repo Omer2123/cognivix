@@ -53,7 +53,7 @@ export default function ContactForm() {
   };
 
   return (
-    <section id="contact" className="bg-[#f8f9fa] py-99 md:py-99 px-4 sm:px-6 relative overflow-hidden">
+    <section id="contact" className="bg-[#f8f9fa] py-20 md:py-28 px-4 sm:px-6 relative overflow-hidden">
       <div className="max-w-4xl mx-auto">
         
         {/* Responsive Section Header */}
@@ -65,7 +65,7 @@ export default function ContactForm() {
         </div>
 
         {/* The Briefing Card - Optimized for Android and Desktop */}
-        <div className="bg-[#0f1218] rounded-[2rem] md:rounded-[3.5rem] p-6 sm:p-10 md:p-20 shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] border border-white/5 relative">
+        <div className="bg-[#0f1218] rounded-2xl md:rounded-3xl p-6 sm:p-10 md:p-16 shadow-xl border border-white/5 relative">
           
           <div className="text-center mb-10 md:mb-16">
             <h3 className="text-xl md:text-3xl font-black text-white uppercase tracking-tighter">
@@ -80,7 +80,7 @@ export default function ContactForm() {
             {/* Name and Email - Stacks on Android, Grid on Web */}
             <div className="flex flex-col md:grid md:grid-cols-2 gap-6 md:gap-10">
               <div className="space-y-2">
-                <label className="text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-widest block text-center">Liaison Name</label>
+                <label className="text-[10px] md:text-xs font-black text-slate-500 uppercase tracking-widest block text-center">Liaison Name</label>
                 <input 
                   type="text" 
                   name="name"
@@ -91,7 +91,7 @@ export default function ContactForm() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-widest block text-center">Authorized Email</label>
+                <label className="text-[10px] md:text-xs font-black text-slate-500 uppercase tracking-widest block text-center">Authorized Email</label>
                 <input 
                   type="email" 
                   name="email"
@@ -104,7 +104,7 @@ export default function ContactForm() {
 
             {/* Operational Sector - Custom UI for Mobile */}
             <div className="space-y-2">
-              <label className="text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-widest block text-center">Operational Sector</label>
+              <label className="text-[10px] md:text-xs font-black text-slate-500 uppercase tracking-widest block text-center">Operational Sector</label>
               <div className="relative">
                 <select
                   name="serviceCategory"
@@ -122,11 +122,11 @@ export default function ContactForm() {
 
             {/* Mission Intelligence - Multi-line Input */}
             <div className="space-y-2">
-              <label className="text-[9px] md:text-[10px] font-black text-slate-500 uppercase tracking-widest block text-center">Mission Intelligence</label>
+              <label className="text-[10px] md:text-xs font-black text-slate-500 uppercase tracking-widest block text-center">Mission Intelligence</label>
               <textarea 
                 name="message"
                 placeholder="Define project scope and requirements..." 
-                className="w-full bg-[#151921] border border-slate-800 text-white p-4 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] h-40 md:h-52 focus:border-red-600 outline-none transition-all placeholder:text-slate-700 text-sm resize-none font-medium leading-relaxed"
+                className="w-full bg-[#151921] border border-slate-800 text-white p-4 md:p-6 rounded-xl md:rounded-2xl h-40 md:h-52 focus:border-red-600 outline-none transition-all placeholder:text-slate-700 text-sm resize-none font-medium leading-relaxed"
                 required 
               />
             </div>

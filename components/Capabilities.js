@@ -32,7 +32,7 @@ export default function Capabilities() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a0c10] via-[#0a0c10]/80 to-[#0a0c10]/40"></div>
       </div>
 
-      <div className="max-w-14xl mx-auto px-4 relative z-10 py-20">
+      <div className="max-w-7xl mx-auto px-4 relative z-10 py-20">
         <div className="grid lg:grid-cols-1 gap-16 items-center">
           
           {/* Left Column: Mission Text */}
@@ -54,7 +54,7 @@ export default function Capabilities() {
                 <h3 className="text-sm font-black text-white uppercase tracking-widest group-hover:text-red-600 transition-colors">
                   {cap.title}
                 </h3>
-                <p className="text-slate-400 text-xs leading-relaxed font- medium">
+                <p className="text-slate-400 text-xs leading-relaxed font-medium">
                   {cap.desc}
                 </p>
                 <div className="w-full h-[10px] bg-white/10 group-hover:bg-red-600/50 transition-colors"></div>

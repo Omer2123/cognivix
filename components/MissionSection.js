@@ -4,8 +4,8 @@ export default function MissionSection() {
       <div className="absolute right-0 top-0 w-1/3 h-full bg-red-600/10 -skew-x-12 translate-x-20" />
       <div className="container mx-auto px-6 relative z-10 text-left">
         <div className="max-w-3xl">
-          <h2 className="text-sm font-bold text-red-600 uppercase tracking-widest mb-4 italic">// Mission Statement</h2>
-          <h3 className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
+          <h2 className="text-sm font-black text-red-600 uppercase tracking-widest mb-4">Mission Statement</h2>
+          <h3 className="text-4xl md:text-5xl font-black mb-8 leading-tight">
             We bridge the gap between technical innovation and federal compliance.
           </h3>
           <p className="text-lg text-gray-400 leading-relaxed mb-12">

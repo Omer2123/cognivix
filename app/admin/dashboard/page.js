@@ -70,7 +70,7 @@ export default function AdvancedDashboard() {
       {/* Sidebar */}
       <aside className="w-64 shrink-0 bg-[#0f1218] border-r border-slate-800 flex flex-col">
         <div className="p-6 border-b border-slate-800 flex items-center gap-3">
-          <div className="w-2.5 h-2.5 bg-red-600 rounded-full animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.8)]" />
+          <div className="w-2 h-2 bg-red-600 rounded-full" />
           <h1 className="text-lg font-black text-white uppercase tracking-tighter">
             Cognivix <span className="text-red-600">Admin</span>
           </h1>
@@ -79,19 +79,19 @@ export default function AdvancedDashboard() {
         <nav className="flex-grow p-4 space-y-1">
           <button
             onClick={() => setActiveTab('logs')}
-            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition ${
-              activeTab === 'logs' ? 'bg-red-600 text-white' : 'hover:bg-slate-800 text-slate-500'
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${
+              activeTab === 'logs' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
             }`}
           >
             Leads
           </button>
           <button
             onClick={() => setActiveTab('security')}
-            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition ${
-              activeTab === 'security' ? 'bg-red-600 text-white' : 'hover:bg-slate-800 text-slate-500'
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${
+              activeTab === 'security' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
             }`}
           >
-            Access Control
+            Settings
           </button>
         </nav>
 
@@ -172,7 +172,7 @@ export default function AdvancedDashboard() {
                             <td className="px-5 py-4 text-white font-bold whitespace-nowrap">{iq.name}</td>
                             <td className="px-5 py-4 text-red-400 font-mono text-xs whitespace-nowrap">{iq.email}</td>
                             <td className="px-5 py-4 whitespace-nowrap">
-                              <span className="bg-red-600/10 text-red-400 text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border border-red-600/20">
+                              <span className="bg-red-600/10 text-red-400 text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded border border-red-600/20">
                                 {iq.serviceCategory || '—'}
                               </span>
                             </td>

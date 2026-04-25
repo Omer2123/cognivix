@@ -26,8 +26,8 @@ export default function Sectors() {
         </h2>
         <div className="grid lg:grid-cols-3 gap-10">
           {sectors.map((s) => (
-            <div key={s.title} className="p-12 bg-[#0f1218] border border-slate-800 rounded-3xl hover:bg-slate-900 transition duration-500">
-              <h3 className="text-2xl font-black text-white mb-6 uppercase italic">{s.title}</h3>
+            <div key={s.title} className="p-12 bg-[#0f1218] border border-slate-800 rounded-3xl hover:bg-slate-800 transition duration-300">
+              <h3 className="text-2xl font-black text-white mb-6 uppercase">{s.title}</h3>
               <p className="text-slate-400 mb-8 text-sm leading-relaxed">{s.desc}</p>
               <div className="space-y-2">
                 {s.tech.map(t => (
