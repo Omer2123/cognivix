@@ -6,14 +6,13 @@ import { verifyPassword } from '@/lib/auth';
 
 export async function POST(req) {
   try {
-    const { password, adminKey } = await req.json();
-    const input = password || adminKey;
+    const { username, password } = await req.json();
 
     await connectToDatabase();
-    const admin = await Admin.findOne({ username: 'admin' });
+    const admin = await Admin.findOne({ username });
 
-    if (!admin || !verifyPassword(input, admin.passwordHash)) {
-      return NextResponse.json({ success: false, message: 'Invalid Admin Key' }, { status: 401 });
+    if (!admin || !verifyPassword(password, admin.passwordHash)) {
+      return NextResponse.json({ success: false, message: 'Invalid Credentials' }, { status: 401 });
     }
 
     const response = NextResponse.json({ success: true, message: 'Authenticated' });
@@ -30,3 +29,4 @@ export async function POST(req) {
     return NextResponse.json({ success: false, error: 'Invalid Request' }, { status: 400 });
   }
 }
+
