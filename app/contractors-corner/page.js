@@ -145,19 +145,24 @@ export default function ContractorsCorner() {
                 <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span>
               </div>
             </div>
-            <div className="flex flex-wrap items-center justify-start md:justify-end gap-2 max-w-full md:max-w-3xl">
-              {naicsCodes.map((n) => (
-                <button
-                  key={n._id}
-                  onClick={() => setActiveNaics(n.code)}
-                  className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border ${activeNaics === n.code
-                      ? 'bg-red-600 border-red-600 text-white shadow-[0_10px_20px_-5px_rgba(220,38,38,0.4)]'
-                      : 'bg-white/5 border-white/10 text-slate-400 hover:border-red-600/50 hover:text-white'
-                    }`}
-                >
-                  {n.label || n.code}
-                </button>
-              ))}
+            <div className="relative group">
+              <select 
+                value={activeNaics}
+                onChange={(e) => setActiveNaics(e.target.value)}
+                className="w-full md:w-[300px] bg-[#0f1218] border border-white/10 text-white text-[10px] font-black uppercase tracking-widest px-6 py-3.5 rounded-xl outline-none focus:border-red-600 transition-all appearance-none pr-12 cursor-pointer shadow-2xl hover:bg-white/[0.05]"
+              >
+                {naicsCodes.map((n) => (
+                  <option key={n._id} value={n.code} className="bg-[#0f1218] text-white py-4">
+                    {n.label || n.code} ({n.code})
+                  </option>
+                ))}
+              </select>
+              {/* Custom Arrow */}
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-red-600 transition-transform group-hover:translate-y-[-40%]">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
             </div>
           </div>
 
