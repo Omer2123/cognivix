@@ -87,11 +87,12 @@ export default function ContractorsCorner() {
     <main className="bg-[#0a0c10] min-h-screen pt-40 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Hub Header */}
-        <div className="border-l-4 border-red-600 pl-8 mb-20">
+        <div className="border-l-4 border-us-red pl-8 mb-20 relative">
+          <div className="absolute -left-1 top-0 h-1/2 w-1 bg-us-blue rounded-t-full"></div>
           <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter">
-            Contractor's <span className="text-red-600">Corner</span>
+            Contractor's <span className="text-us-red">Corner</span>
           </h1>
-          <p className="text-slate-400 font-bold uppercase tracking-[0.2em] mt-4 max-w-2xl">
+          <p className="text-slate-400 font-bold uppercase tracking-[0.2em] mt-4 max-w-2xl border-l border-us-blue/30 pl-4">
             Resources, guidance, and tools to help government contractors win, comply, and scale.
           </p>
         </div>
@@ -101,11 +102,15 @@ export default function ContractorsCorner() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-3xl font-black text-white uppercase tracking-tight">
-                Live <span className="text-red-600">Opportunities</span>
+                Live <span className="text-us-red">Opportunities</span>
               </h2>
               <div className="flex items-center gap-3 mt-2">
                 <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Real-time data from SAM.gov</p>
-                <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span>
+                <div className="flex gap-1">
+                  <span className="w-1.5 h-1.5 bg-us-red rounded-full animate-pulse"></span>
+                  <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse delay-75"></span>
+                  <span className="w-1.5 h-1.5 bg-us-blue rounded-full animate-pulse delay-150"></span>
+                </div>
               </div>
             </div>
             <div className="flex flex-wrap items-center justify-start md:justify-end gap-2 max-w-full md:max-w-3xl">
@@ -114,8 +119,8 @@ export default function ContractorsCorner() {
                   key={n._id}
                   onClick={() => setActiveNaics(n.code)}
                   className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border ${activeNaics === n.code
-                      ? 'bg-red-600 border-red-600 text-white shadow-[0_10px_20px_-5px_rgba(220,38,38,0.4)]'
-                      : 'bg-white/5 border-white/10 text-slate-400 hover:border-red-600/50 hover:text-white'
+                      ? 'bg-us-red border-us-red text-white shadow-[0_10px_20px_-5px_rgba(191,10,48,0.4)]'
+                      : 'bg-white/5 border-white/10 text-slate-400 hover:border-us-blue/50 hover:text-white'
                     }`}
                 >
                   {n.label || n.code}
@@ -132,7 +137,8 @@ export default function ContractorsCorner() {
               </div>
             </div>
           ) : (
-            <div className="bg-[#0f1218] border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl">
+            <div className="bg-[#0f1218] border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl stars-bg relative">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-us-blue via-white to-us-red opacity-50"></div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
@@ -149,8 +155,8 @@ export default function ContractorsCorner() {
                       <tr key={opp._id} className="hover:bg-white/[0.02] transition-colors group">
                         <td className="px-8 py-6">
                           <div className="flex flex-col gap-1">
-                            <span className="text-red-600 text-[10px] font-black uppercase tracking-widest">{opp.solicitationNumber || 'N/A'}</span>
-                            <span className="text-white text-sm font-bold line-clamp-1 group-hover:text-red-500 transition-colors">{opp.title}</span>
+                            <span className="text-us-blue text-[10px] font-black uppercase tracking-widest">{opp.solicitationNumber || 'N/A'}</span>
+                            <span className="text-white text-sm font-bold line-clamp-1 group-hover:text-us-red transition-colors">{opp.title}</span>
                           </div>
                         </td>
                         <td className="px-8 py-6">
@@ -177,7 +183,7 @@ export default function ContractorsCorner() {
                           <Link 
                             href={`https://sam.gov/opp/${opp._id}/view`} 
                             target="_blank"
-                            className="inline-flex items-center gap-2 text-red-600 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all"
+                            className="inline-flex items-center gap-2 text-us-blue hover:text-us-red text-[10px] font-black uppercase tracking-widest transition-all"
                           >
                             View Details
                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

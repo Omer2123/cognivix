@@ -54,7 +54,8 @@ export default function Navbar() {
   return (
     <nav className={`fixed w-full z-[100] transition-all duration-300 ${
       isScrolled || isOpen ? 'bg-[#0a0c10]/95 backdrop-blur-lg border-b border-white/10' : 'bg-transparent'
-    } py-4 md:py-6`}> {/* Increased padding slightly to accommodate larger logo */}
+    } py-4 md:py-6`}>
+ {/* Increased padding slightly to accommodate larger logo */}
       <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center relative">
         
         {/* Brand Identity with Increased Logo Size */}
