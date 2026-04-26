@@ -8,6 +8,7 @@ export default function AdvancedDashboard() {
   const [agencies, setAgencies] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [resources, setResources] = useState([]);
+  const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('logs');
   const [newPassword, setNewPassword] = useState('');
@@ -47,6 +48,10 @@ export default function AdvancedDashboard() {
     const resourcesRes = await fetch('/api/admin/resources');
     const resourcesData = await resourcesRes.json();
     if (resourcesData.success) setResources(resourcesData.data);
+
+    const applicationsRes = await fetch('/api/admin/applications');
+    const applicationsData = await applicationsRes.json();
+    if (applicationsData.success) setApplications(applicationsData.data);
 
     setLoading(false);
   };
@@ -257,6 +262,18 @@ export default function AdvancedDashboard() {
     }
   };
 
+  const deleteApplication = async (id) => {
+    if (!confirm('Delete this application dossier?')) return;
+    const res = await fetch('/api/admin/applications', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    if (res.ok) {
+      setApplications((prev) => prev.filter((a) => a._id !== id));
+    }
+  };
+
   const updatePassword = async (e) => {
     e.preventDefault();
     const res = await fetch('/api/admin/update-password', {
@@ -355,6 +372,13 @@ export default function AdvancedDashboard() {
               }`}
           >
             Career Management
+          </button>
+          <button
+            onClick={() => setActiveTab('applications')}
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'applications' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
+              }`}
+          >
+            Job Applications
           </button>
           <button
             onClick={() => setActiveTab('resources')}
@@ -610,6 +634,102 @@ export default function AdvancedDashboard() {
                     <tr>
                       <td colSpan={3} className="p-10 text-center text-slate-500 text-xs font-bold uppercase tracking-widest">
                         No resources defined.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : activeTab === 'applications' ? (
+          <div className="max-w-6xl space-y-8">
+            <div className="bg-[#0f1218] rounded-2xl border border-slate-800 overflow-hidden">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-slate-900/60">
+                  <tr className="text-slate-500 text-[10px] font-black uppercase tracking-widest border-b border-slate-800">
+                    <th className="px-5 py-4">Candidate</th>
+                    <th className="px-5 py-4">Applied For</th>
+                    <th className="px-5 py-4">Dossier / CV</th>
+                    <th className="px-5 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60">
+                  {applications.map((app) => (
+                    <React.Fragment key={app._id}>
+                      <tr className="hover:bg-white/[0.03] transition group">
+                        <td className="px-5 py-6">
+                          <div className="flex flex-col">
+                            <span className="text-white font-black uppercase tracking-tight">{app.name}</span>
+                            <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">{app.email}</span>
+                          </div>
+                        </td>
+                        <td className="px-5 py-6">
+                          <span className="text-red-500 text-[10px] font-black uppercase tracking-widest bg-red-500/10 px-3 py-1 rounded-full">
+                            {app.jobTitle}
+                          </span>
+                        </td>
+                        <td className="px-5 py-6">
+                          <a 
+                            href={app.cvUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition text-[10px] font-black uppercase tracking-widest"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            View Document
+                          </a>
+                        </td>
+                        <td className="px-5 py-6 text-right space-x-3">
+                          <button
+                            onClick={() => setExpandedId(expandedId === app._id ? null : app._id)}
+                            className="text-slate-600 hover:text-white transition p-1"
+                          >
+                            <svg className={`w-5 h-5 transition-transform ${expandedId === app._id ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => deleteApplication(app._id)}
+                            className="text-slate-600 hover:text-red-500 transition p-1"
+                          >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                      {expandedId === app._id && (
+                        <tr className="bg-slate-900/40">
+                          <td colSpan={4} className="px-8 py-8">
+                            <div className="space-y-4">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                  <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest block mb-2">Candidate Message</span>
+                                  <p className="text-slate-400 text-sm italic leading-relaxed">"{app.message || 'No additional message provided.'}"</p>
+                                </div>
+                                <div className="space-y-4">
+                                  <div>
+                                    <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest block mb-1">Phone Number</span>
+                                    <p className="text-white text-sm font-bold">{app.phone || 'N/A'}</p>
+                                  </div>
+                                  <div>
+                                    <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest block mb-1">Submission Date</span>
+                                    <p className="text-white text-sm font-bold">{new Date(app.createdAt).toLocaleString()}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  ))}
+                  {applications.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="p-20 text-center text-slate-500 text-xs font-black uppercase tracking-widest">
+                        No applications received yet.
                       </td>
                     </tr>
                   )}
