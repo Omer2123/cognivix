@@ -437,7 +437,7 @@ export default function AdvancedDashboard() {
                   disabled={isUploading}
                   className="w-full bg-red-600 hover:bg-red-700 disabled:bg-slate-800 text-white font-black py-5 rounded-xl uppercase tracking-widest transition text-xs shadow-[0_10px_30px_-10px_rgba(220,38,38,0.4)]"
                 >
-                  {isUploading ? 'Uploading to Vercel Blob...' : 'Register Agency'}
+                  {isUploading ? 'Uploading...' : 'Register Agency'}
                 </button>
               </form>
             </div>
@@ -482,6 +482,63 @@ export default function AdvancedDashboard() {
             </div>
           </div>
         ) : activeTab === 'sectors' ? (
+          <div className="max-w-4xl space-y-8">
+            <div className="bg-[#0f1218] p-8 rounded-2xl border border-slate-800">
+              <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-6">Add New Sector</h3>
+              <form onSubmit={addSector} className="flex gap-4">
+                <input
+                  type="text"
+                  value={newSectorName}
+                  onChange={(e) => setNewSectorName(e.target.value)}
+                  className="flex-grow bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                  placeholder="e.g. Advanced AI Research"
+                />
+                <button className="bg-red-600 hover:bg-red-700 text-white font-black px-8 rounded-xl uppercase tracking-widest transition text-xs">
+                  Add Sector
+                </button>
+              </form>
+            </div>
+
+            <div className="bg-[#0f1218] rounded-2xl border border-slate-800 overflow-hidden">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-slate-900/60">
+                  <tr className="text-slate-500 text-[10px] font-black uppercase tracking-widest border-b border-slate-800">
+                    <th className="px-5 py-4">Sector Name</th>
+                    <th className="px-5 py-4">Created At</th>
+                    <th className="px-5 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60">
+                  {sectors.map((sector) => (
+                    <tr key={sector._id} className="hover:bg-white/[0.03] transition">
+                      <td className="px-5 py-4 text-white font-bold">{sector.name}</td>
+                      <td className="px-5 py-4 text-slate-500 text-xs font-mono">
+                        {new Date(sector.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-5 py-4 text-right">
+                        <button
+                          onClick={() => deleteSector(sector._id)}
+                          className="text-slate-600 hover:text-red-500 transition p-1"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {sectors.length === 0 && (
+                    <tr>
+                      <td colSpan={3} className="p-10 text-center text-slate-500 text-xs font-bold uppercase tracking-widest">
+                        No sectors defined.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : (
           <div className="max-w-md bg-[#0f1218] p-10 rounded-2xl border border-slate-800">
             <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-6">Update Password</h3>
             <form onSubmit={updatePassword} className="space-y-5">
@@ -503,6 +560,7 @@ export default function AdvancedDashboard() {
             </form>
           </div>
         )}
+
       </main>
     </div>
   );
