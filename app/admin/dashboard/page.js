@@ -9,6 +9,7 @@ export default function AdvancedDashboard() {
   const [jobs, setJobs] = useState([]);
   const [resources, setResources] = useState([]);
   const [applications, setApplications] = useState([]);
+  const [naicsCodes, setNaicsCodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('logs');
   const [newPassword, setNewPassword] = useState('');
@@ -16,6 +17,7 @@ export default function AdvancedDashboard() {
   const [newAgency, setNewAgency] = useState({ name: '', logo: '' });
   const [newJob, setNewJob] = useState({ title: '', location: '', type: 'Full-time', department: '', description: '', requirements: '' });
   const [newResource, setNewResource] = useState({ title: '', tagline: '', desc: '', bullets: '', cta: 'Learn More', link: '/#contact' });
+  const [newNaics, setNewNaics] = useState({ code: '', label: '' });
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -52,6 +54,10 @@ export default function AdvancedDashboard() {
     const applicationsRes = await fetch('/api/admin/applications');
     const applicationsData = await applicationsRes.json();
     if (applicationsData.success) setApplications(applicationsData.data);
+
+    const naicsRes = await fetch('/api/admin/naics');
+    const naicsData = await naicsRes.json();
+    if (naicsData.success) setNaicsCodes(naicsData.data);
 
     setLoading(false);
   };
@@ -274,6 +280,35 @@ export default function AdvancedDashboard() {
     }
   };
 
+  const addNaics = async (e) => {
+    e.preventDefault();
+    if (!newNaics.code) return;
+    const res = await fetch('/api/admin/naics', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newNaics),
+    });
+    const data = await res.json();
+    if (data.success) {
+      setNaicsCodes((prev) => [...prev, data.data]);
+      setNewNaics({ code: '', label: '' });
+    } else {
+      alert(data.error);
+    }
+  };
+
+  const deleteNaics = async (id) => {
+    if (!confirm('Delete this NAICS code?')) return;
+    const res = await fetch('/api/admin/naics', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    if (res.ok) {
+      setNaicsCodes((prev) => prev.filter((n) => n._id !== id));
+    }
+  };
+
   const updatePassword = async (e) => {
     e.preventDefault();
     const res = await fetch('/api/admin/update-password', {
@@ -440,6 +475,13 @@ export default function AdvancedDashboard() {
             Contractor Corner
           </button>
           <button
+            onClick={() => setActiveTab('naics')}
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'naics' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
+              }`}
+          >
+            NAICS Management
+          </button>
+          <button
             onClick={() => setActiveTab('security')}
             className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'security' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
               }`}
@@ -473,7 +515,7 @@ export default function AdvancedDashboard() {
             <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-1">Dashboard</h2>
             <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Administrator</p>
           </div>
-          {['logs', 'applications', 'careers', 'resources', 'agencies', 'sectors'].includes(activeTab) && (
+          {['logs', 'applications', 'careers', 'resources', 'agencies', 'sectors', 'naics'].includes(activeTab) && (
             <button
               onClick={exportData}
               className="bg-white/5 border border-white/10 hover:bg-white/10 px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest text-white transition"
@@ -784,6 +826,70 @@ export default function AdvancedDashboard() {
                     <tr>
                       <td colSpan={4} className="p-20 text-center text-slate-500 text-xs font-black uppercase tracking-widest">
                         No applications received yet.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : activeTab === 'naics' ? (
+          <div className="max-w-4xl space-y-8">
+            <div className="bg-[#0f1218] p-8 rounded-2xl border border-slate-800">
+              <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-6">
+                Add NAICS Code
+              </h3>
+              <form onSubmit={addNaics} className="flex gap-4">
+                <input
+                  type="text"
+                  value={newNaics.code}
+                  onChange={(e) => setNewNaics({ ...newNaics, code: e.target.value })}
+                  className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition flex-1"
+                  placeholder="NAICS Code (e.g. 541519)"
+                />
+                <input
+                  type="text"
+                  value={newNaics.label}
+                  onChange={(e) => setNewNaics({ ...newNaics, label: e.target.value })}
+                  className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition flex-1"
+                  placeholder="Label (Optional)"
+                />
+                <button className="bg-red-600 hover:bg-red-700 text-white font-black px-8 rounded-xl uppercase tracking-widest transition text-xs">
+                  Add
+                </button>
+              </form>
+            </div>
+
+            <div className="bg-[#0f1218] rounded-2xl border border-slate-800 overflow-hidden">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-slate-900/60">
+                  <tr className="text-slate-500 text-[10px] font-black uppercase tracking-widest border-b border-slate-800">
+                    <th className="px-5 py-4">NAICS Code</th>
+                    <th className="px-5 py-4">Label</th>
+                    <th className="px-5 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60">
+                  {naicsCodes.map((n) => (
+                    <tr key={n._id} className="hover:bg-white/[0.03] transition">
+                      <td className="px-5 py-4 text-white font-bold">{n.code}</td>
+                      <td className="px-5 py-4 text-slate-500 text-xs">{n.label || '—'}</td>
+                      <td className="px-5 py-4 text-right">
+                        <button
+                          onClick={() => deleteNaics(n._id)}
+                          className="text-slate-600 hover:text-red-500 transition p-1"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {naicsCodes.length === 0 && (
+                    <tr>
+                      <td colSpan={3} className="p-10 text-center text-slate-500 text-xs font-bold uppercase tracking-widest">
+                        No NAICS codes defined.
                       </td>
                     </tr>
                   )}
