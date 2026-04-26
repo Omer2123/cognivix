@@ -10,6 +10,13 @@ export default function ContractorsCorner() {
   const [naicsCodes, setNaicsCodes] = useState([]);
   const [activeNaics, setActiveNaics] = useState('541519');
 
+  // Eligibility Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedOpp, setSelectedOpp] = useState(null);
+  const [leadForm, setLeadForm] = useState({ name: '', email: '', phone: '', company: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
   useEffect(() => {
     const fetchResources = async () => {
       try {
@@ -82,6 +89,36 @@ export default function ContractorsCorner() {
 
     fetchOpportunities();
   }, [activeNaics]);
+
+  const handleEligibilitySubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...leadForm,
+          opportunityId: selectedOpp.solicitationNumber || selectedOpp._id,
+          opportunityTitle: selectedOpp.title,
+          opportunityUrl: `https://sam.gov/opp/${selectedOpp._id}/view`
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSubmitted(true);
+        setTimeout(() => {
+          setIsModalOpen(false);
+          setSubmitted(false);
+          setLeadForm({ name: '', email: '', phone: '', company: '' });
+        }, 3000);
+      }
+    } catch (err) {
+      console.error('Submission failed:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main className="bg-[#0a0c10] min-h-screen pt-40 pb-20 px-6">
@@ -174,16 +211,24 @@ export default function ContractorsCorner() {
                           </span>
                         </td>
                         <td className="px-8 py-6 text-right">
-                          <Link 
-                            href={`https://sam.gov/opp/${opp._id}/view`} 
-                            target="_blank"
-                            className="inline-flex items-center gap-2 text-red-600 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all"
-                          >
-                            View Details
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                          </Link>
+                          <div className="flex flex-col items-end gap-2">
+                            <button 
+                              onClick={() => { setSelectedOpp(opp); setIsModalOpen(true); }}
+                              className="bg-red-600 hover:bg-red-700 text-white text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-lg transition-all shadow-lg active:scale-95"
+                            >
+                              Check Eligibility
+                            </button>
+                            <Link 
+                              href={`https://sam.gov/opp/${opp._id}/view`} 
+                              target="_blank"
+                              className="inline-flex items-center gap-2 text-slate-500 hover:text-red-500 text-[9px] font-black uppercase tracking-widest transition-all"
+                            >
+                              View Details
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                              </svg>
+                            </Link>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -236,6 +281,99 @@ export default function ContractorsCorner() {
         {resources.length === 0 && !loading && (
           <div className="text-center py-20">
             <p className="text-slate-500 text-xs font-black uppercase tracking-widest">No resources currently available.</p>
+          </div>
+        )}
+
+        {/* Eligibility Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
+            <div className="bg-[#0f1218] border border-white/10 w-full max-w-lg rounded-[2rem] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
+              <div className="p-8 border-b border-white/5 bg-white/[0.02]">
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-red-600 text-[10px] font-black uppercase tracking-widest">Eligibility Assessment</span>
+                  <button onClick={() => setIsModalOpen(false)} className="text-slate-500 hover:text-white transition-colors">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <h3 className="text-2xl font-black text-white uppercase tracking-tight line-clamp-2">
+                  {selectedOpp?.title}
+                </h3>
+              </div>
+
+              <div className="p-8">
+                {submitted ? (
+                  <div className="text-center py-10">
+                    <div className="w-16 h-16 bg-green-500/10 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <h4 className="text-xl font-black text-white uppercase tracking-tight mb-2">Request Received</h4>
+                    <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">Our team will get back to you shortly.</p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleEligibilitySubmit} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Full Name</label>
+                        <input 
+                          required
+                          type="text" 
+                          value={leadForm.name}
+                          onChange={(e) => setLeadForm({...leadForm, name: e.target.value})}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-red-600 transition-colors"
+                          placeholder="John Doe"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Work Email</label>
+                        <input 
+                          required
+                          type="email" 
+                          value={leadForm.email}
+                          onChange={(e) => setLeadForm({...leadForm, email: e.target.value})}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-red-600 transition-colors"
+                          placeholder="john@company.com"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Phone Number</label>
+                        <input 
+                          type="tel" 
+                          value={leadForm.phone}
+                          onChange={(e) => setLeadForm({...leadForm, phone: e.target.value})}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-red-600 transition-colors"
+                          placeholder="+1 (555) 000-0000"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Company Name</label>
+                        <input 
+                          type="text" 
+                          value={leadForm.company}
+                          onChange={(e) => setLeadForm({...leadForm, company: e.target.value})}
+                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-red-600 transition-colors"
+                          placeholder="Defense Corp"
+                        />
+                      </div>
+                    </div>
+                    <button 
+                      disabled={isSubmitting}
+                      className="w-full bg-red-600 hover:bg-red-700 disabled:bg-red-900 text-white font-black uppercase tracking-widest py-4 rounded-xl transition-all shadow-xl active:scale-95 mt-4"
+                    >
+                      {isSubmitting ? 'Processing...' : 'Submit Assessment'}
+                    </button>
+                    <p className="text-[9px] text-center text-slate-600 font-bold uppercase tracking-widest mt-4">
+                      By submitting, you agree to our terms of service and federal data privacy policies.
+                    </p>
+                  </form>
+                )}
+              </div>
+            </div>
           </div>
         )}
       </div>
