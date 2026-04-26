@@ -5,6 +5,8 @@ import Link from 'next/link';
 export default function ContractorsCorner() {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [opportunities, setOpportunities] = useState([]);
+  const [oppLoading, setOppLoading] = useState(true);
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -20,7 +22,39 @@ export default function ContractorsCorner() {
         setLoading(false);
       }
     };
+
+    const fetchOpportunities = async () => {
+      const CACHE_KEY = 'sam_opportunities_541519';
+      const CACHE_TIME_KEY = 'sam_opportunities_timestamp';
+      const ONE_HOUR = 60 * 60 * 1000;
+
+      try {
+        const cachedData = localStorage.getItem(CACHE_KEY);
+        const cachedTimestamp = localStorage.getItem(CACHE_TIME_KEY);
+        const now = Date.now();
+
+        if (cachedData && cachedTimestamp && (now - cachedTimestamp < ONE_HOUR)) {
+          setOpportunities(JSON.parse(cachedData));
+          setOppLoading(false);
+          return;
+        }
+
+        const res = await fetch('https://sam.gov/api/prod/sgs/v1/search/?random=1777185748864&index=ac&page=0&sort=-modifiedDate&size=25&mode=search&responseType=json&domain=ac&q=541519&qMode=ALL');
+        const data = await res.json();
+        if (data && data._embedded && data._embedded.results) {
+          setOpportunities(data._embedded.results);
+          localStorage.setItem(CACHE_KEY, JSON.stringify(data._embedded.results));
+          localStorage.setItem(CACHE_TIME_KEY, now.toString());
+        }
+      } catch (err) {
+        console.error('Failed to fetch opportunities:', err);
+      } finally {
+        setOppLoading(false);
+      }
+    };
+
     fetchResources();
+    fetchOpportunities();
   }, []);
 
   return (
@@ -36,7 +70,99 @@ export default function ContractorsCorner() {
           </p>
         </div>
 
-        {/* Resource Grid */}
+        {/* SAM.gov Opportunities Table */}
+        <div className="mb-20">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-3xl font-black text-white uppercase tracking-tight">
+                Live <span className="text-red-600">Opportunities</span>
+              </h2>
+              <div className="flex items-center gap-3 mt-2">
+                <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Real-time data from SAM.gov</p>
+                <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span>
+                <span className="text-red-600 text-[10px] font-black uppercase tracking-widest bg-red-600/10 px-2 py-0.5 rounded-md border border-red-600/20">NAICS: 541519</span>
+              </div>
+            </div>
+            <div className="h-px flex-grow bg-gradient-to-r from-red-600/50 to-transparent ml-8 hidden md:block"></div>
+          </div>
+
+          {oppLoading ? (
+            <div className="bg-[#0f1218] border border-white/5 rounded-[2rem] p-20 flex justify-center items-center">
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-10 h-10 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">Syncing with SAM.gov...</span>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-[#0f1218] border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/5 bg-white/[0.02]">
+                      <th className="px-8 py-6 text-slate-400 text-[10px] font-black uppercase tracking-widest">Notice ID / Title</th>
+                      <th className="px-8 py-6 text-slate-400 text-[10px] font-black uppercase tracking-widest">Type</th>
+                      <th className="px-8 py-6 text-slate-400 text-[10px] font-black uppercase tracking-widest">Department / Agency</th>
+                      <th className="px-8 py-6 text-slate-400 text-[10px] font-black uppercase tracking-widest">Modified Date</th>
+                      <th className="px-8 py-6 text-slate-400 text-[10px] font-black uppercase tracking-widest text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5">
+                    {opportunities.map((opp) => (
+                      <tr key={opp._id} className="hover:bg-white/[0.02] transition-colors group">
+                        <td className="px-8 py-6">
+                          <div className="flex flex-col gap-1">
+                            <span className="text-red-600 text-[10px] font-black uppercase tracking-widest">{opp.solicitationNumber || 'N/A'}</span>
+                            <span className="text-white text-sm font-bold line-clamp-1 group-hover:text-red-500 transition-colors">{opp.title}</span>
+                          </div>
+                        </td>
+                        <td className="px-8 py-6">
+                          <span className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded-full text-slate-300 text-[9px] font-black uppercase tracking-widest">
+                            {opp.type?.value || 'Unknown'}
+                          </span>
+                        </td>
+                        <td className="px-8 py-6">
+                          <div className="flex flex-col">
+                            <span className="text-slate-300 text-[11px] font-bold uppercase">{opp.organizationHierarchy?.[0]?.name || 'N/A'}</span>
+                            <span className="text-slate-500 text-[9px] font-medium uppercase tracking-tight line-clamp-1">{opp.organizationHierarchy?.[1]?.name}</span>
+                          </div>
+                        </td>
+                        <td className="px-8 py-6">
+                          <span className="text-slate-400 text-[11px] font-mono">
+                            {new Date(opp.modifiedDate).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            })}
+                          </span>
+                        </td>
+                        <td className="px-8 py-6 text-right">
+                          <Link 
+                            href={`https://sam.gov/opp/${opp._id}/view`} 
+                            target="_blank"
+                            className="inline-flex items-center gap-2 text-red-600 hover:text-white text-[10px] font-black uppercase tracking-widest transition-all"
+                          >
+                            View Details
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Existing Resource Grid */}
+        <div className="flex items-center gap-6 mb-10">
+          <h2 className="text-3xl font-black text-white uppercase tracking-tight whitespace-nowrap">
+            Support <span className="text-red-600">Resources</span>
+          </h2>
+          <div className="h-px w-full bg-gradient-to-r from-red-600/50 to-transparent"></div>
+        </div>
         {loading ? (
           <div className="text-center py-20">
             <div className="inline-block w-12 h-12 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
@@ -48,7 +174,7 @@ export default function ContractorsCorner() {
                 <span className="text-red-600 text-xs font-black uppercase tracking-widest">{res.tagline}</span>
                 <h2 className="text-3xl font-black text-white uppercase mt-2 mb-4 group-hover:text-red-500 transition-colors">{res.title}</h2>
                 <p className="text-slate-500 text-sm leading-relaxed mb-8">{res.desc}</p>
-                
+
                 {res.bullets && (
                   <ul className="grid grid-cols-1 gap-3 mb-10">
                     {res.bullets.split('\n').map((b, i) => (
@@ -77,4 +203,4 @@ export default function ContractorsCorner() {
       </div>
     </main>
   );
-}
+}
