@@ -3,7 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function AdvancedDashboard() {
+  const [inquiries, setInquiries] = useState([]);
   const [sectors, setSectors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('logs');
+  const [newPassword, setNewPassword] = useState('');
   const [newSectorName, setNewSectorName] = useState('');
   const [expandedId, setExpandedId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
