@@ -1,22 +1,25 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ContactForm() {
   const [status, setStatus] = useState(null);
 
-  const sectors = [
-    "Urban Modernization",
-    "Strategic Energy Grid",
-    "Federal Logistics Hubs",
-    "Cyber Governance",
-    "National Infrastructure",
-    "Defense Systems",
-    "Technical Writing",
-    "GIS & Remote Sensing",
-    "Business Development Intern",
-    "Proposal Writing Intern",
-    "Other Services",
-  ];
+  const [sectors, setSectors] = useState([]);
+
+  useEffect(() => {
+    const fetchSectors = async () => {
+      try {
+        const res = await fetch('/api/sectors');
+        const data = await res.json();
+        if (data.success) {
+          setSectors(data.data.map(s => s.name));
+        }
+      } catch (err) {
+        console.error('Failed to fetch sectors:', err);
+      }
+    };
+    fetchSectors();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
