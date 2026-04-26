@@ -4,22 +4,7 @@ import mongoose from 'mongoose';
 const InquirySchema = new mongoose.Schema({
   name: String,
   email: String,
-  serviceCategory: {
-    type: String,
-    enum: [
-      'Urban Modernization',
-      'Strategic Energy Grid',
-      'Federal Logistics Hubs',
-      'Cyber Governance',
-      'National Infrastructure',
-      'Defense Systems',
-      'Technical Writing',
-      'GIS & Remote Sensing',
-      'Business Development Intern',
-      'Proposal Writing Intern',
-      'Other Services',
-    ],
-  },
+  serviceCategory: String,
   message: String,
   createdAt: { type: Date, default: Date.now }
 });
