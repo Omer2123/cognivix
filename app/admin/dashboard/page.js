@@ -402,7 +402,7 @@ export default function AdvancedDashboard() {
             className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'logs' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
               }`}
           >
-            Leads
+            Leads Management
           </button>
           <button
             onClick={() => setActiveTab('sectors')}
@@ -723,9 +723,9 @@ export default function AdvancedDashboard() {
                           </span>
                         </td>
                         <td className="px-5 py-6">
-                          <a 
-                            href={app.cvUrl} 
-                            target="_blank" 
+                          <a
+                            href={app.cvUrl}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition text-[10px] font-black uppercase tracking-widest"
                           >
@@ -966,7 +966,7 @@ export default function AdvancedDashboard() {
                   )}
                 </div>
 
-                <button 
+                <button
                   disabled={isUploading}
                   className="w-full bg-red-600 hover:bg-red-700 disabled:bg-slate-800 text-white font-black py-5 rounded-xl uppercase tracking-widest transition text-xs shadow-[0_10px_30px_-10px_rgba(220,38,38,0.4)]"
                 >
