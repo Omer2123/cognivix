@@ -17,6 +17,7 @@ export default function AdvancedDashboard() {
   const [newResource, setNewResource] = useState({ title: '', tagline: '', desc: '', bullets: '', cta: 'Learn More', link: '/#contact' });
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
@@ -54,17 +55,35 @@ export default function AdvancedDashboard() {
     e.preventDefault();
     if (!newResource.title) return;
     const res = await fetch('/api/admin/resources', {
-      method: 'POST',
+      method: editingId ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newResource),
+      body: JSON.stringify(editingId ? { ...newResource, id: editingId } : newResource),
     });
     const data = await res.json();
     if (data.success) {
-      setResources((prev) => [...prev, data.data]);
+      if (editingId) {
+        setResources((prev) => prev.map((r) => (r._id === editingId ? data.data : r)));
+        setEditingId(null);
+      } else {
+        setResources((prev) => [...prev, data.data]);
+      }
       setNewResource({ title: '', tagline: '', desc: '', bullets: '', cta: 'Learn More', link: '/#contact' });
     } else {
       alert(data.error);
     }
+  };
+
+  const editResource = (res) => {
+    setNewResource({
+      title: res.title,
+      tagline: res.tagline,
+      desc: res.desc,
+      bullets: res.bullets,
+      cta: res.cta,
+      link: res.link
+    });
+    setEditingId(res._id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const deleteResource = async (id) => {
@@ -83,17 +102,35 @@ export default function AdvancedDashboard() {
     e.preventDefault();
     if (!newJob.title || !newJob.description) return;
     const res = await fetch('/api/admin/jobs', {
-      method: 'POST',
+      method: editingId ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newJob),
+      body: JSON.stringify(editingId ? { ...newJob, id: editingId } : newJob),
     });
     const data = await res.json();
     if (data.success) {
-      setJobs((prev) => [data.data, ...prev]);
+      if (editingId) {
+        setJobs((prev) => prev.map((j) => (j._id === editingId ? data.data : j)));
+        setEditingId(null);
+      } else {
+        setJobs((prev) => [data.data, ...prev]);
+      }
       setNewJob({ title: '', location: '', type: 'Full-time', department: '', description: '', requirements: '' });
     } else {
       alert(data.error);
     }
+  };
+
+  const editJob = (job) => {
+    setNewJob({
+      title: job.title,
+      location: job.location,
+      type: job.type,
+      department: job.department,
+      description: job.description,
+      requirements: job.requirements
+    });
+    setEditingId(job._id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const deleteJob = async (id) => {
@@ -141,21 +178,31 @@ export default function AdvancedDashboard() {
     }
 
     const res = await fetch('/api/admin/agencies', {
-      method: 'POST',
+      method: editingId ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: newAgency.name, logo: logoUrl }),
+      body: JSON.stringify(editingId ? { ...newAgency, logo: logoUrl, id: editingId } : { ...newAgency, logo: logoUrl }),
     });
     const data = await res.json();
     if (data.success) {
-      setAgencies((prev) => [data.data, ...prev]);
+      if (editingId) {
+        setAgencies((prev) => prev.map((a) => (a._id === editingId ? data.data : a)));
+        setEditingId(null);
+      } else {
+        setAgencies((prev) => [data.data, ...prev]);
+      }
       setNewAgency({ name: '', logo: '' });
       setSelectedFile(null);
-      // Reset the file input
       const fileInput = document.getElementById('agency-logo-upload');
       if (fileInput) fileInput.value = '';
     } else {
       alert(data.error);
     }
+  };
+
+  const editAgency = (agency) => {
+    setNewAgency({ name: agency.name, logo: agency.logo });
+    setEditingId(agency._id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const deleteAgency = async (id) => {
@@ -174,17 +221,28 @@ export default function AdvancedDashboard() {
     e.preventDefault();
     if (!newSectorName) return;
     const res = await fetch('/api/admin/sectors', {
-      method: 'POST',
+      method: editingId ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: newSectorName }),
+      body: JSON.stringify(editingId ? { name: newSectorName, id: editingId } : { name: newSectorName }),
     });
     const data = await res.json();
     if (data.success) {
-      setSectors((prev) => [data.data, ...prev]);
+      if (editingId) {
+        setSectors((prev) => prev.map((s) => (s._id === editingId ? data.data : s)));
+        setEditingId(null);
+      } else {
+        setSectors((prev) => [data.data, ...prev]);
+      }
       setNewSectorName('');
     } else {
       alert(data.error);
     }
+  };
+
+  const editSector = (sector) => {
+    setNewSectorName(sector.name);
+    setEditingId(sector._id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const deleteSector = async (id) => {
@@ -453,7 +511,16 @@ export default function AdvancedDashboard() {
         ) : activeTab === 'resources' ? (
           <div className="max-w-4xl space-y-8">
             <div className="bg-[#0f1218] p-8 rounded-2xl border border-slate-800">
-              <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-6">Add New Resource Card</h3>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-black text-white uppercase tracking-tighter">
+                  {editingId ? 'Edit Resource' : 'Add New Resource Card'}
+                </h3>
+                {editingId && (
+                  <button onClick={() => { setEditingId(null); setNewResource({ title: '', tagline: '', desc: '', bullets: '', cta: 'Learn More', link: '/#contact' }); }} className="text-[10px] text-slate-500 hover:text-white font-bold uppercase tracking-widest transition">
+                    Cancel Edit
+                  </button>
+                )}
+              </div>
               <form onSubmit={addResource} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input
@@ -519,7 +586,15 @@ export default function AdvancedDashboard() {
                     <tr key={res._id} className="hover:bg-white/[0.03] transition">
                       <td className="px-5 py-4 text-white font-bold">{res.title}</td>
                       <td className="px-5 py-4 text-slate-500 text-xs">{res.tagline}</td>
-                      <td className="px-5 py-4 text-right">
+                      <td className="px-5 py-4 text-right space-x-2">
+                        <button
+                          onClick={() => editResource(res)}
+                          className="text-slate-600 hover:text-white transition p-1"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
                         <button
                           onClick={() => deleteResource(res._id)}
                           className="text-slate-600 hover:text-red-500 transition p-1"
@@ -545,7 +620,16 @@ export default function AdvancedDashboard() {
         ) : activeTab === 'careers' ? (
           <div className="max-w-4xl space-y-8">
             <div className="bg-[#0f1218] p-8 rounded-2xl border border-slate-800">
-              <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-6">Create New Job Opening</h3>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-black text-white uppercase tracking-tighter">
+                  {editingId ? 'Edit Job Opening' : 'Create New Job Opening'}
+                </h3>
+                {editingId && (
+                  <button onClick={() => { setEditingId(null); setNewJob({ title: '', location: '', type: 'Full-time', department: '', description: '', requirements: '' }); }} className="text-[10px] text-slate-500 hover:text-white font-bold uppercase tracking-widest transition">
+                    Cancel Edit
+                  </button>
+                )}
+              </div>
               <form onSubmit={addJob} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input
@@ -593,7 +677,7 @@ export default function AdvancedDashboard() {
                   placeholder="Requirements (one per line)..."
                 />
                 <button className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl uppercase tracking-widest transition text-xs">
-                  Post Job Opening
+                  {editingId ? 'Update Job Opening' : 'Post Job Opening'}
                 </button>
               </form>
             </div>
@@ -612,7 +696,15 @@ export default function AdvancedDashboard() {
                     <tr key={job._id} className="hover:bg-white/[0.03] transition">
                       <td className="px-5 py-4 text-white font-bold">{job.title}</td>
                       <td className="px-5 py-4 text-slate-500 text-xs">{job.location}</td>
-                      <td className="px-5 py-4 text-right">
+                      <td className="px-5 py-4 text-right space-x-2">
+                        <button
+                          onClick={() => editJob(job)}
+                          className="text-slate-600 hover:text-white transition p-1"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
                         <button
                           onClick={() => deleteJob(job._id)}
                           className="text-slate-600 hover:text-red-500 transition p-1"
@@ -639,7 +731,14 @@ export default function AdvancedDashboard() {
           <div className="max-w-4xl space-y-8">
             <div className="bg-[#0f1218] p-8 rounded-2xl border border-slate-800">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-black text-white uppercase tracking-tighter">Add New Agency</h3>
+                <h3 className="text-xl font-black text-white uppercase tracking-tighter">
+                  {editingId ? 'Edit Agency' : 'Add New Agency'}
+                </h3>
+                {editingId && (
+                  <button onClick={() => { setEditingId(null); setNewAgency({ name: '', logo: '' }); }} className="text-[10px] text-slate-500 hover:text-white font-bold uppercase tracking-widest transition">
+                    Cancel Edit
+                  </button>
+                )}
               </div>
 
               <form onSubmit={addAgency} className="space-y-6">
@@ -693,11 +792,11 @@ export default function AdvancedDashboard() {
                   )}
                 </div>
 
-                <button
+                <button 
                   disabled={isUploading}
                   className="w-full bg-red-600 hover:bg-red-700 disabled:bg-slate-800 text-white font-black py-5 rounded-xl uppercase tracking-widest transition text-xs shadow-[0_10px_30px_-10px_rgba(220,38,38,0.4)]"
                 >
-                  {isUploading ? 'Uploading...' : 'Register Agency'}
+                  {isUploading ? 'Uploading...' : editingId ? 'Update Agency' : 'Register Agency'}
                 </button>
               </form>
             </div>
@@ -718,7 +817,15 @@ export default function AdvancedDashboard() {
                         <img src={agency.logo} alt={agency.name} className="h-8 w-auto object-contain brightness-0 invert opacity-60" />
                       </td>
                       <td className="px-5 py-4 text-white font-bold">{agency.name}</td>
-                      <td className="px-5 py-4 text-right">
+                      <td className="px-5 py-4 text-right space-x-2">
+                        <button
+                          onClick={() => editAgency(agency)}
+                          className="text-slate-600 hover:text-white transition p-1"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
                         <button
                           onClick={() => deleteAgency(agency._id)}
                           className="text-slate-600 hover:text-red-500 transition p-1"
@@ -744,7 +851,16 @@ export default function AdvancedDashboard() {
         ) : activeTab === 'sectors' ? (
           <div className="max-w-4xl space-y-8">
             <div className="bg-[#0f1218] p-8 rounded-2xl border border-slate-800">
-              <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-6">Add New Sector</h3>
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-black text-white uppercase tracking-tighter">
+                  {editingId ? 'Edit Sector' : 'Add New Sector'}
+                </h3>
+                {editingId && (
+                  <button onClick={() => { setEditingId(null); setNewSectorName(''); }} className="text-[10px] text-slate-500 hover:text-white font-bold uppercase tracking-widest transition">
+                    Cancel Edit
+                  </button>
+                )}
+              </div>
               <form onSubmit={addSector} className="flex gap-4">
                 <input
                   type="text"
@@ -754,7 +870,7 @@ export default function AdvancedDashboard() {
                   placeholder="e.g. Advanced AI Research"
                 />
                 <button className="bg-red-600 hover:bg-red-700 text-white font-black px-8 rounded-xl uppercase tracking-widest transition text-xs">
-                  Add Sector
+                  {editingId ? 'Update Sector' : 'Add Sector'}
                 </button>
               </form>
             </div>
@@ -775,7 +891,15 @@ export default function AdvancedDashboard() {
                       <td className="px-5 py-4 text-slate-500 text-xs font-mono">
                         {new Date(sector.createdAt).toLocaleDateString()}
                       </td>
-                      <td className="px-5 py-4 text-right">
+                      <td className="px-5 py-4 text-right space-x-2">
+                        <button
+                          onClick={() => editSector(sector)}
+                          className="text-slate-600 hover:text-white transition p-1"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
                         <button
                           onClick={() => deleteSector(sector._id)}
                           className="text-slate-600 hover:text-red-500 transition p-1"

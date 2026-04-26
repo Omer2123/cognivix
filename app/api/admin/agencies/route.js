@@ -69,3 +69,23 @@ export async function DELETE(req) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+export async function PUT(req) {
+  try {
+    const decoded = await checkAuth();
+    if (!decoded) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
+
+    await connectToDatabase();
+    const { id, name, logo } = await req.json();
+
+    if (!id || !name || !logo) {
+      return NextResponse.json({ success: false, error: 'ID, Name and Logo are required' }, { status: 400 });
+    }
+
+    const updated = await Agency.findByIdAndUpdate(id, { name, logo }, { new: true });
+    return NextResponse.json({ success: true, data: updated });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
