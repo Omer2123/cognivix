@@ -5,10 +5,14 @@ import { useRouter } from 'next/navigation';
 export default function AdvancedDashboard() {
   const [inquiries, setInquiries] = useState([]);
   const [sectors, setSectors] = useState([]);
+  const [agencies, setAgencies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('logs');
   const [newPassword, setNewPassword] = useState('');
   const [newSectorName, setNewSectorName] = useState('');
+  const [newAgency, setNewAgency] = useState({ name: '', logo: '' });
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
@@ -27,7 +31,73 @@ export default function AdvancedDashboard() {
     const sectorsData = await sectorsRes.json();
     if (sectorsData.success) setSectors(sectorsData.data);
 
+    const agenciesRes = await fetch('/api/admin/agencies');
+    const agenciesData = await agenciesRes.json();
+    if (agenciesData.success) setAgencies(agenciesData.data);
+
     setLoading(false);
+  };
+
+  const addAgency = async (e) => {
+    e.preventDefault();
+    let logoUrl = newAgency.logo;
+
+    if (selectedFile) {
+      setIsUploading(true);
+      try {
+        const res = await fetch(`/api/admin/agencies/upload?filename=${selectedFile.name}`, {
+          method: 'POST',
+          body: selectedFile,
+        });
+        const data = await res.json();
+        if (data.success) {
+          logoUrl = data.url;
+        } else {
+          alert('Upload failed: ' + data.error);
+          setIsUploading(false);
+          return;
+        }
+      } catch (err) {
+        alert('Upload error: ' + err.message);
+        setIsUploading(false);
+        return;
+      }
+      setIsUploading(false);
+    }
+
+    if (!newAgency.name || !logoUrl) {
+      alert('Agency Name and Logo (URL or File) are required.');
+      return;
+    }
+
+    const res = await fetch('/api/admin/agencies', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: newAgency.name, logo: logoUrl }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      setAgencies((prev) => [data.data, ...prev]);
+      setNewAgency({ name: '', logo: '' });
+      setSelectedFile(null);
+      // Reset the file input
+      const fileInput = document.getElementById('agency-logo-upload');
+      if (fileInput) fileInput.value = '';
+    } else {
+      alert(data.error);
+    }
+  };
+
+  const deleteAgency = async (id) => {
+    if (!confirm('Delete this agency?')) return;
+    const res = await fetch('/api/admin/agencies', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    if (res.ok) {
+      setAgencies((prev) => prev.filter((a) => a._id !== id));
+    }
   };
 
   const addSector = async (e) => {
@@ -143,6 +213,13 @@ export default function AdvancedDashboard() {
               }`}
           >
             Sector Management
+          </button>
+          <button
+            onClick={() => setActiveTab('agencies')}
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'agencies' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
+              }`}
+          >
+            Agency Management
           </button>
           <button
             onClick={() => setActiveTab('security')}
@@ -289,20 +366,78 @@ export default function AdvancedDashboard() {
               )}
             </div>
           </>
-        ) : activeTab === 'sectors' ? (
+        ) : activeTab === 'agencies' ? (
           <div className="max-w-4xl space-y-8">
             <div className="bg-[#0f1218] p-8 rounded-2xl border border-slate-800">
-              <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-6">Add New Sector</h3>
-              <form onSubmit={addSector} className="flex gap-4">
-                <input
-                  type="text"
-                  value={newSectorName}
-                  onChange={(e) => setNewSectorName(e.target.value)}
-                  className="flex-grow bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
-                  placeholder="e.g. Advanced AI Research"
-                />
-                <button className="bg-red-600 hover:bg-red-700 text-white font-black px-8 rounded-xl uppercase tracking-widest transition text-xs">
-                  Add Sector
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-black text-white uppercase tracking-tighter">Add New Agency</h3>
+                <div className="text-[10px] bg-red-600/10 text-red-500 border border-red-600/20 px-3 py-1 rounded-full font-bold uppercase tracking-widest">
+                  Vercel Deployment
+                </div>
+              </div>
+
+              <p className="text-slate-500 text-xs mb-6 leading-relaxed">
+                Since we are on Vercel, local file storage is not persistent. 
+                <br />
+                <span className="text-red-400 font-bold">Recommended:</span> Use <strong>Vercel Blob</strong> or <strong>Cloudinary</strong> to host your SVGs, then paste the URL below.
+              </p>
+
+              <form onSubmit={addAgency} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Agency Name</label>
+                    <input
+                      type="text"
+                      value={newAgency.name}
+                      onChange={(e) => setNewAgency({ ...newAgency, name: e.target.value })}
+                      className="w-full bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                      placeholder="e.g. NASA"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Option A: Upload Logo (Vercel Blob)</label>
+                    <input
+                      id="agency-logo-upload"
+                      type="file"
+                      accept=".svg,.png,.jpg,.jpeg"
+                      onChange={(e) => setSelectedFile(e.target.files[0])}
+                      className="w-full bg-slate-900 border border-slate-800 p-3.5 rounded-xl text-white outline-none focus:border-red-600 transition text-xs file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-red-600 file:text-white hover:file:bg-red-700"
+                    />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-slate-800"></div>
+                  </div>
+                  <div className="relative flex justify-center text-[10px] uppercase font-black tracking-widest">
+                    <span className="bg-[#0f1218] px-4 text-slate-600">OR</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Option B: Use External Logo URL</label>
+                  <input
+                    type="text"
+                    value={newAgency.logo}
+                    onChange={(e) => setNewAgency({ ...newAgency, logo: e.target.value })}
+                    className="w-full bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                    placeholder="https://example.com/logo.svg"
+                    disabled={!!selectedFile}
+                  />
+                  {selectedFile && (
+                    <p className="text-[10px] text-red-500 font-bold uppercase tracking-widest ml-1">
+                      File selected — URL input disabled
+                    </p>
+                  )}
+                </div>
+
+                <button 
+                  disabled={isUploading}
+                  className="w-full bg-red-600 hover:bg-red-700 disabled:bg-slate-800 text-white font-black py-5 rounded-xl uppercase tracking-widest transition text-xs shadow-[0_10px_30px_-10px_rgba(220,38,38,0.4)]"
+                >
+                  {isUploading ? 'Uploading to Vercel Blob...' : 'Register Agency'}
                 </button>
               </form>
             </div>
@@ -311,21 +446,21 @@ export default function AdvancedDashboard() {
               <table className="w-full text-left border-collapse">
                 <thead className="bg-slate-900/60">
                   <tr className="text-slate-500 text-[10px] font-black uppercase tracking-widest border-b border-slate-800">
-                    <th className="px-5 py-4">Sector Name</th>
-                    <th className="px-5 py-4">Created At</th>
+                    <th className="px-5 py-4">Preview</th>
+                    <th className="px-5 py-4">Agency Name</th>
                     <th className="px-5 py-4 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800/60">
-                  {sectors.map((sector) => (
-                    <tr key={sector._id} className="hover:bg-white/[0.03] transition">
-                      <td className="px-5 py-4 text-white font-bold">{sector.name}</td>
-                      <td className="px-5 py-4 text-slate-500 text-xs font-mono">
-                        {new Date(sector.createdAt).toLocaleDateString()}
+                  {agencies.map((agency) => (
+                    <tr key={agency._id} className="hover:bg-white/[0.03] transition">
+                      <td className="px-5 py-4">
+                        <img src={agency.logo} alt={agency.name} className="h-8 w-auto object-contain brightness-0 invert opacity-60" />
                       </td>
+                      <td className="px-5 py-4 text-white font-bold">{agency.name}</td>
                       <td className="px-5 py-4 text-right">
                         <button
-                          onClick={() => deleteSector(sector._id)}
+                          onClick={() => deleteAgency(agency._id)}
                           className="text-slate-600 hover:text-red-500 transition p-1"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -335,10 +470,10 @@ export default function AdvancedDashboard() {
                       </td>
                     </tr>
                   ))}
-                  {sectors.length === 0 && (
+                  {agencies.length === 0 && (
                     <tr>
                       <td colSpan={3} className="p-10 text-center text-slate-500 text-xs font-bold uppercase tracking-widest">
-                        No sectors defined.
+                        No agencies registered.
                       </td>
                     </tr>
                   )}
@@ -346,7 +481,7 @@ export default function AdvancedDashboard() {
               </table>
             </div>
           </div>
-        ) : (
+        ) : activeTab === 'sectors' ? (
           <div className="max-w-md bg-[#0f1218] p-10 rounded-2xl border border-slate-800">
             <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-6">Update Password</h3>
             <form onSubmit={updatePassword} className="space-y-5">

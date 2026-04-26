@@ -1,13 +1,23 @@
+'use client';
+import { useState, useEffect } from 'react';
+
 export default function Agencies() {
-  const agencies = [
-    { name: "DHS", logo: "/logos/dhs.svg" },
-    { name: "DoD", logo: "/logos/dod.svg" },
-    { name: "DoJ", logo: "/logos/doj.svg" },
-    { name: "GSA", logo: "/logos/gsa.svg" },
-    { name: "NASA", logo: "/logos/nasa.svg" },
-    { name: "DoE", logo: "/logos/doe.svg" },
-    { name: "HHS", logo: "/logos/hhs.svg" },
-  ];
+  const [agencies, setAgencies] = useState([]);
+
+  useEffect(() => {
+    const fetchAgencies = async () => {
+      try {
+        const res = await fetch('/api/agencies');
+        const data = await res.json();
+        if (data.success) {
+          setAgencies(data.data);
+        }
+      } catch (err) {
+        console.error('Failed to fetch agencies:', err);
+      }
+    };
+    fetchAgencies();
+  }, []);
 
   return (
     <div className="bg-white py-12 border-b border-slate-200">
@@ -17,17 +27,17 @@ export default function Agencies() {
             <a 
               key={agency.name} 
               href="#capabilities" 
-              className="group flex flex-col items-center gap-3 transition-all duration-300 hover:scale-105"
+              className="group flex flex-col items-center gap-3 transition-all duration-300 hover:scale-110"
               title={agency.name}
             >
               <div className="relative h-12 md:h-16 w-auto flex items-center justify-center">
                 <img 
                   src={agency.logo} 
                   alt={agency.name} 
-                  className="h-full w-auto object-contain grayscale group-hover:grayscale-0 transition-all duration-500 opacity-60 group-hover:opacity-100"
+                  className="h-full w-auto object-contain transition-all duration-500"
                 />
               </div>
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover:text-red-600 transition-colors">
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest group-hover:text-red-600 transition-colors">
                 {agency.name}
               </span>
             </a>
