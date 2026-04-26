@@ -7,6 +7,8 @@ export default function ContractorsCorner() {
   const [loading, setLoading] = useState(true);
   const [opportunities, setOpportunities] = useState([]);
   const [oppLoading, setOppLoading] = useState(true);
+  const [naicsCodes, setNaicsCodes] = useState([]);
+  const [activeNaics, setActiveNaics] = useState('541519');
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -22,12 +24,34 @@ export default function ContractorsCorner() {
         setLoading(false);
       }
     };
+    fetchResources();
+  }, []);
+
+  useEffect(() => {
+    const fetchNaics = async () => {
+      try {
+        const res = await fetch('/api/naics');
+        const data = await res.json();
+        if (data.success && data.data.length > 0) {
+          setNaicsCodes(data.data);
+          setActiveNaics(data.data[0].code);
+        }
+      } catch (err) {
+        console.error('Failed to fetch NAICS codes:', err);
+      }
+    };
+    fetchNaics();
+  }, []);
+
+  useEffect(() => {
+    if (!activeNaics) return;
 
     const fetchOpportunities = async () => {
-      const CACHE_KEY = 'sam_opportunities_541519';
-      const CACHE_TIME_KEY = 'sam_opportunities_timestamp';
+      const CACHE_KEY = `sam_opportunities_${activeNaics}`;
+      const CACHE_TIME_KEY = `sam_opportunities_timestamp_${activeNaics}`;
       const ONE_HOUR = 60 * 60 * 1000;
 
+      setOppLoading(true);
       try {
         const cachedData = localStorage.getItem(CACHE_KEY);
         const cachedTimestamp = localStorage.getItem(CACHE_TIME_KEY);
@@ -39,23 +63,25 @@ export default function ContractorsCorner() {
           return;
         }
 
-        const res = await fetch('https://sam.gov/api/prod/sgs/v1/search/?random=1777185748864&index=ac&page=0&sort=-modifiedDate&size=25&mode=search&responseType=json&domain=ac&q=541519&qMode=ALL');
+        const res = await fetch(`https://sam.gov/api/prod/sgs/v1/search/?random=${now}&index=ac&page=0&sort=-modifiedDate&size=25&mode=search&responseType=json&domain=ac&q=${activeNaics}&qMode=ALL`);
         const data = await res.json();
         if (data && data._embedded && data._embedded.results) {
           setOpportunities(data._embedded.results);
           localStorage.setItem(CACHE_KEY, JSON.stringify(data._embedded.results));
           localStorage.setItem(CACHE_TIME_KEY, now.toString());
+        } else {
+          setOpportunities([]);
         }
       } catch (err) {
         console.error('Failed to fetch opportunities:', err);
+        setOpportunities([]);
       } finally {
         setOppLoading(false);
       }
     };
 
-    fetchResources();
     fetchOpportunities();
-  }, []);
+  }, [activeNaics]);
 
   return (
     <main className="bg-[#0a0c10] min-h-screen pt-40 pb-20 px-6">
@@ -80,10 +106,22 @@ export default function ContractorsCorner() {
               <div className="flex items-center gap-3 mt-2">
                 <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Real-time data from SAM.gov</p>
                 <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span>
-                <span className="text-red-600 text-[10px] font-black uppercase tracking-widest bg-red-600/10 px-2 py-0.5 rounded-md border border-red-600/20">NAICS: 541519</span>
               </div>
             </div>
-            <div className="h-px flex-grow bg-gradient-to-r from-red-600/50 to-transparent ml-8 hidden md:block"></div>
+            <div className="flex flex-wrap items-center justify-start md:justify-end gap-2 max-w-full md:max-w-3xl">
+              {naicsCodes.map((n) => (
+                <button
+                  key={n._id}
+                  onClick={() => setActiveNaics(n.code)}
+                  className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all border ${activeNaics === n.code
+                      ? 'bg-red-600 border-red-600 text-white shadow-[0_10px_20px_-5px_rgba(220,38,38,0.4)]'
+                      : 'bg-white/5 border-white/10 text-slate-400 hover:border-red-600/50 hover:text-white'
+                    }`}
+                >
+                  {n.label || n.code}
+                </button>
+              ))}
+            </div>
           </div>
 
           {oppLoading ? (
