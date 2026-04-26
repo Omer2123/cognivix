@@ -285,12 +285,64 @@ export default function AdvancedDashboard() {
   };
 
   const exportData = () => {
-    const header = 'Name,Email,Service Category,Message,Date';
-    const rows = inquiries.map((i) =>
-      `"${i.name}","${i.email}","${i.serviceCategory || ''}","${i.message}","${new Date(i.createdAt).toLocaleString()}"`
-    );
-    const csvContent = 'data:text/csv;charset=utf-8,' + [header, ...rows].join('\n');
-    window.open(encodeURI(csvContent));
+    let header = '';
+    let rows = [];
+    let filename = 'export.csv';
+
+    switch (activeTab) {
+      case 'logs':
+        header = 'Name,Email,Service Category,Message,Date';
+        rows = inquiries.map((i) =>
+          `"${i.name}","${i.email}","${i.serviceCategory || ''}","${i.message}","${new Date(i.createdAt).toLocaleString()}"`
+        );
+        filename = 'inquiries.csv';
+        break;
+      case 'applications':
+        header = 'Candidate Name,Email,Phone,Applied For,Message,Date';
+        rows = applications.map((a) =>
+          `"${a.name}","${a.email}","${a.phone || ''}","${a.jobTitle}","${(a.message || '').replace(/\n/g, ' ')}","${new Date(a.createdAt).toLocaleString()}"`
+        );
+        filename = 'job_applications.csv';
+        break;
+      case 'careers':
+        header = 'Job Title,Location,Type,Department,Description';
+        rows = jobs.map((j) =>
+          `"${j.title}","${j.location}","${j.type}","${j.department}","${(j.description || '').replace(/\n/g, ' ')}"`
+        );
+        filename = 'job_openings.csv';
+        break;
+      case 'resources':
+        header = 'Title,Tagline,Description,CTA,Link';
+        rows = resources.map((r) =>
+          `"${r.title}","${r.tagline}","${(r.desc || '').replace(/\n/g, ' ')}","${r.cta}","${r.link}"`
+        );
+        filename = 'contractor_resources.csv';
+        break;
+      case 'agencies':
+        header = 'Agency Name,Logo URL';
+        rows = agencies.map((a) => `"${a.name}","${a.logo}"`);
+        filename = 'agencies.csv';
+        break;
+      case 'sectors':
+        header = 'Sector Name,Created At';
+        rows = sectors.map((s) => `"${s.name}","${new Date(s.createdAt).toLocaleString()}"`);
+        filename = 'sectors.csv';
+        break;
+      default:
+        alert('Export not available for this tab.');
+        return;
+    }
+
+    const csvContent = [header, ...rows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const todayCount = inquiries.filter((i) => {
@@ -421,12 +473,14 @@ export default function AdvancedDashboard() {
             <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-1">Dashboard</h2>
             <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Administrator</p>
           </div>
-          <button
-            onClick={exportData}
-            className="bg-white/5 border border-white/10 hover:bg-white/10 px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest text-white transition"
-          >
-            Export CSV
-          </button>
+          {['logs', 'applications', 'careers', 'resources', 'agencies', 'sectors'].includes(activeTab) && (
+            <button
+              onClick={exportData}
+              className="bg-white/5 border border-white/10 hover:bg-white/10 px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest text-white transition"
+            >
+              Export {activeTab === 'logs' ? 'Leads' : activeTab === 'applications' ? 'Applications' : activeTab === 'careers' ? 'Jobs' : activeTab === 'resources' ? 'Resources' : activeTab === 'agencies' ? 'Agencies' : 'Sectors'} CSV
+            </button>
+          )}
         </header>
 
         {activeTab === 'logs' ? (
