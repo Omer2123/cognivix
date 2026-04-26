@@ -6,11 +6,13 @@ export default function AdvancedDashboard() {
   const [inquiries, setInquiries] = useState([]);
   const [sectors, setSectors] = useState([]);
   const [agencies, setAgencies] = useState([]);
+  const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('logs');
   const [newPassword, setNewPassword] = useState('');
   const [newSectorName, setNewSectorName] = useState('');
   const [newAgency, setNewAgency] = useState({ name: '', logo: '' });
+  const [newJob, setNewJob] = useState({ title: '', location: '', type: 'Full-time', department: '', description: '', requirements: '' });
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
@@ -35,7 +37,40 @@ export default function AdvancedDashboard() {
     const agenciesData = await agenciesRes.json();
     if (agenciesData.success) setAgencies(agenciesData.data);
 
+    const jobsRes = await fetch('/api/admin/jobs');
+    const jobsData = await jobsRes.json();
+    if (jobsData.success) setJobs(jobsData.data);
+
     setLoading(false);
+  };
+
+  const addJob = async (e) => {
+    e.preventDefault();
+    if (!newJob.title || !newJob.description) return;
+    const res = await fetch('/api/admin/jobs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newJob),
+    });
+    const data = await res.json();
+    if (data.success) {
+      setJobs((prev) => [data.data, ...prev]);
+      setNewJob({ title: '', location: '', type: 'Full-time', department: '', description: '', requirements: '' });
+    } else {
+      alert(data.error);
+    }
+  };
+
+  const deleteJob = async (id) => {
+    if (!confirm('Delete this job opening?')) return;
+    const res = await fetch('/api/admin/jobs', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    if (res.ok) {
+      setJobs((prev) => prev.filter((j) => j._id !== id));
+    }
   };
 
   const addAgency = async (e) => {
@@ -222,6 +257,13 @@ export default function AdvancedDashboard() {
             Agency Management
           </button>
           <button
+            onClick={() => setActiveTab('careers')}
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'careers' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
+              }`}
+          >
+            Career Management
+          </button>
+          <button
             onClick={() => setActiveTab('security')}
             className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'security' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
               }`}
@@ -366,21 +408,105 @@ export default function AdvancedDashboard() {
               )}
             </div>
           </>
+        ) : activeTab === 'careers' ? (
+          <div className="max-w-4xl space-y-8">
+            <div className="bg-[#0f1218] p-8 rounded-2xl border border-slate-800">
+              <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-6">Create New Job Opening</h3>
+              <form onSubmit={addJob} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    value={newJob.title}
+                    onChange={(e) => setNewJob({ ...newJob, title: e.target.value })}
+                    className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                    placeholder="Job Title (e.g. Senior Cyber Analyst)"
+                  />
+                  <input
+                    type="text"
+                    value={newJob.location}
+                    onChange={(e) => setNewJob({ ...newJob, location: e.target.value })}
+                    className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                    placeholder="Location (e.g. Washington, D.C.)"
+                  />
+                  <select
+                    value={newJob.type}
+                    onChange={(e) => setNewJob({ ...newJob, type: e.target.value })}
+                    className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                  >
+                    <option value="Full-time">Full-time</option>
+                    <option value="Contract">Contract</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Internship">Internship</option>
+                  </select>
+                  <input
+                    type="text"
+                    value={newJob.department}
+                    onChange={(e) => setNewJob({ ...newJob, department: e.target.value })}
+                    className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                    placeholder="Department (e.g. Defense Operations)"
+                  />
+                </div>
+                <textarea
+                  value={newJob.description}
+                  onChange={(e) => setNewJob({ ...newJob, description: e.target.value })}
+                  className="w-full h-32 bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                  placeholder="Job Description..."
+                />
+                <textarea
+                  value={newJob.requirements}
+                  onChange={(e) => setNewJob({ ...newJob, requirements: e.target.value })}
+                  className="w-full h-32 bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                  placeholder="Requirements (one per line)..."
+                />
+                <button className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl uppercase tracking-widest transition text-xs">
+                  Post Job Opening
+                </button>
+              </form>
+            </div>
+
+            <div className="bg-[#0f1218] rounded-2xl border border-slate-800 overflow-hidden">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-slate-900/60">
+                  <tr className="text-slate-500 text-[10px] font-black uppercase tracking-widest border-b border-slate-800">
+                    <th className="px-5 py-4">Position</th>
+                    <th className="px-5 py-4">Location</th>
+                    <th className="px-5 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60">
+                  {jobs.map((job) => (
+                    <tr key={job._id} className="hover:bg-white/[0.03] transition">
+                      <td className="px-5 py-4 text-white font-bold">{job.title}</td>
+                      <td className="px-5 py-4 text-slate-500 text-xs">{job.location}</td>
+                      <td className="px-5 py-4 text-right">
+                        <button
+                          onClick={() => deleteJob(job._id)}
+                          className="text-slate-600 hover:text-red-500 transition p-1"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {jobs.length === 0 && (
+                    <tr>
+                      <td colSpan={3} className="p-10 text-center text-slate-500 text-xs font-bold uppercase tracking-widest">
+                        No active vacancies.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
         ) : activeTab === 'agencies' ? (
           <div className="max-w-4xl space-y-8">
             <div className="bg-[#0f1218] p-8 rounded-2xl border border-slate-800">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-black text-white uppercase tracking-tighter">Add New Agency</h3>
-                <div className="text-[10px] bg-red-600/10 text-red-500 border border-red-600/20 px-3 py-1 rounded-full font-bold uppercase tracking-widest">
-                  Vercel Deployment
-                </div>
               </div>
-
-              <p className="text-slate-500 text-xs mb-6 leading-relaxed">
-                Since we are on Vercel, local file storage is not persistent. 
-                <br />
-                <span className="text-red-400 font-bold">Recommended:</span> Use <strong>Vercel Blob</strong> or <strong>Cloudinary</strong> to host your SVGs, then paste the URL below.
-              </p>
 
               <form onSubmit={addAgency} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -394,7 +520,7 @@ export default function AdvancedDashboard() {
                       placeholder="e.g. NASA"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Option A: Upload Logo (Vercel Blob)</label>
                     <input
@@ -433,7 +559,7 @@ export default function AdvancedDashboard() {
                   )}
                 </div>
 
-                <button 
+                <button
                   disabled={isUploading}
                   className="w-full bg-red-600 hover:bg-red-700 disabled:bg-slate-800 text-white font-black py-5 rounded-xl uppercase tracking-widest transition text-xs shadow-[0_10px_30px_-10px_rgba(220,38,38,0.4)]"
                 >
