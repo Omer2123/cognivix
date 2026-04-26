@@ -20,14 +20,14 @@ export default function Agencies() {
   }, []);
 
   return (
-    <div className="bg-white py-12 border-b border-slate-200">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20">
-          {agencies.map((agency) => (
+    <div className="bg-white py-12 border-b border-slate-200 overflow-hidden">
+      <div className="relative group">
+        <div className="flex items-center gap-20 animate-marquee whitespace-nowrap w-max px-10">
+          {[...agencies, ...agencies, ...agencies].map((agency, idx) => (
             <a 
-              key={agency.name} 
+              key={`${agency.name}-${idx}`} 
               href="#capabilities" 
-              className="group flex flex-col items-center gap-3 transition-all duration-300 hover:scale-110"
+              className="group/item flex flex-col items-center gap-3 transition-all duration-300 hover:scale-110"
               title={agency.name}
             >
               <div className="relative h-12 md:h-16 w-auto flex items-center justify-center">
@@ -37,12 +37,16 @@ export default function Agencies() {
                   className="h-full w-auto object-contain transition-all duration-500"
                 />
               </div>
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest group-hover:text-red-600 transition-colors">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover/item:text-red-600 transition-colors">
                 {agency.name}
               </span>
             </a>
           ))}
         </div>
+        
+        {/* Subtle Fade Masks for premium look */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10"></div>
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10"></div>
       </div>
     </div>
   );
