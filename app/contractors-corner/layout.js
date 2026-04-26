@@ -1,9 +1,8 @@
 export const metadata = {
   title: "Contractor's Corner | Live Opportunities & Bid Management",
   description:
-    'Live SAM.gov federal contract opportunities filtered by NAICS code. Resources for bid management, contract vehicle strategy, federal bidding support, and proposal development for government contractors.',
+    'Live federal contract opportunities filtered by NAICS code. Resources for bid management, contract vehicle strategy, federal bidding support, and proposal development for government contractors.',
   keywords: [
-    'SAM.gov opportunities',
     'federal contract opportunities',
     'bid management',
     'naics code contracts',
