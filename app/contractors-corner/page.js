@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export default function ContractorsCorner() {
   const [resources, setResources] = useState([]);
@@ -58,9 +59,11 @@ export default function ContractorsCorner() {
                   </ul>
                 )}
 
-                <button className="w-full py-4 bg-white/5 hover:bg-red-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all border border-white/10 group-hover:border-transparent group-hover:shadow-[0_10px_30px_-5px_rgba(220,38,38,0.4)]">
-                  {res.cta || 'Learn More'}
-                </button>
+                <Link href={res.link || '/#contact'} className="block w-full">
+                  <button className="w-full py-4 bg-white/5 hover:bg-red-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all border border-white/10 group-hover:border-transparent group-hover:shadow-[0_10px_30px_-5px_rgba(220,38,38,0.4)]">
+                    {res.cta || 'Learn More'}
+                  </button>
+                </Link>
               </div>
             ))}
           </div>

@@ -14,7 +14,7 @@ export default function AdvancedDashboard() {
   const [newSectorName, setNewSectorName] = useState('');
   const [newAgency, setNewAgency] = useState({ name: '', logo: '' });
   const [newJob, setNewJob] = useState({ title: '', location: '', type: 'Full-time', department: '', description: '', requirements: '' });
-  const [newResource, setNewResource] = useState({ title: '', tagline: '', desc: '', bullets: '', cta: 'Learn More' });
+  const [newResource, setNewResource] = useState({ title: '', tagline: '', desc: '', bullets: '', cta: 'Learn More', link: '/#contact' });
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
@@ -61,7 +61,7 @@ export default function AdvancedDashboard() {
     const data = await res.json();
     if (data.success) {
       setResources((prev) => [...prev, data.data]);
-      setNewResource({ title: '', tagline: '', desc: '', bullets: '', cta: 'Learn More' });
+      setNewResource({ title: '', tagline: '', desc: '', bullets: '', cta: 'Learn More', link: '/#contact' });
     } else {
       alert(data.error);
     }
@@ -483,13 +483,22 @@ export default function AdvancedDashboard() {
                   className="w-full h-24 bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
                   placeholder="Bullet Points (one per line)..."
                 />
-                <input
-                  type="text"
-                  value={newResource.cta}
-                  onChange={(e) => setNewResource({ ...newResource, cta: e.target.value })}
-                  className="w-full bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
-                  placeholder="Button Text (e.g. Talk to an Advisor)"
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    value={newResource.cta}
+                    onChange={(e) => setNewResource({ ...newResource, cta: e.target.value })}
+                    className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                    placeholder="Button Text (e.g. Talk to an Advisor)"
+                  />
+                  <input
+                    type="text"
+                    value={newResource.link}
+                    onChange={(e) => setNewResource({ ...newResource, link: e.target.value })}
+                    className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                    placeholder="Link URL (e.g. /#contact)"
+                  />
+                </div>
                 <button className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl uppercase tracking-widest transition text-xs">
                   Create Resource Card
                 </button>
