@@ -7,12 +7,14 @@ export default function AdvancedDashboard() {
   const [sectors, setSectors] = useState([]);
   const [agencies, setAgencies] = useState([]);
   const [jobs, setJobs] = useState([]);
+  const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('logs');
   const [newPassword, setNewPassword] = useState('');
   const [newSectorName, setNewSectorName] = useState('');
   const [newAgency, setNewAgency] = useState({ name: '', logo: '' });
   const [newJob, setNewJob] = useState({ title: '', location: '', type: 'Full-time', department: '', description: '', requirements: '' });
+  const [newResource, setNewResource] = useState({ title: '', tagline: '', desc: '', bullets: '', cta: 'Learn More' });
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
@@ -41,7 +43,40 @@ export default function AdvancedDashboard() {
     const jobsData = await jobsRes.json();
     if (jobsData.success) setJobs(jobsData.data);
 
+    const resourcesRes = await fetch('/api/admin/resources');
+    const resourcesData = await resourcesRes.json();
+    if (resourcesData.success) setResources(resourcesData.data);
+
     setLoading(false);
+  };
+
+  const addResource = async (e) => {
+    e.preventDefault();
+    if (!newResource.title) return;
+    const res = await fetch('/api/admin/resources', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newResource),
+    });
+    const data = await res.json();
+    if (data.success) {
+      setResources((prev) => [...prev, data.data]);
+      setNewResource({ title: '', tagline: '', desc: '', bullets: '', cta: 'Learn More' });
+    } else {
+      alert(data.error);
+    }
+  };
+
+  const deleteResource = async (id) => {
+    if (!confirm('Delete this resource?')) return;
+    const res = await fetch('/api/admin/resources', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    if (res.ok) {
+      setResources((prev) => prev.filter((r) => r._id !== id));
+    }
   };
 
   const addJob = async (e) => {
@@ -264,6 +299,13 @@ export default function AdvancedDashboard() {
             Career Management
           </button>
           <button
+            onClick={() => setActiveTab('resources')}
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'resources' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
+              }`}
+          >
+            Contractor Corner
+          </button>
+          <button
             onClick={() => setActiveTab('security')}
             className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'security' ? 'border-red-600 text-white bg-white/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
               }`}
@@ -408,6 +450,89 @@ export default function AdvancedDashboard() {
               )}
             </div>
           </>
+        ) : activeTab === 'resources' ? (
+          <div className="max-w-4xl space-y-8">
+            <div className="bg-[#0f1218] p-8 rounded-2xl border border-slate-800">
+              <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-6">Add New Resource Card</h3>
+              <form onSubmit={addResource} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    value={newResource.title}
+                    onChange={(e) => setNewResource({ ...newResource, title: e.target.value })}
+                    className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                    placeholder="Title (e.g. Getting Started)"
+                  />
+                  <input
+                    type="text"
+                    value={newResource.tagline}
+                    onChange={(e) => setNewResource({ ...newResource, tagline: e.target.value })}
+                    className="bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                    placeholder="Tagline (e.g. SAM.gov Basics)"
+                  />
+                </div>
+                <textarea
+                  value={newResource.desc}
+                  onChange={(e) => setNewResource({ ...newResource, desc: e.target.value })}
+                  className="w-full h-24 bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                  placeholder="Short Description..."
+                />
+                <textarea
+                  value={newResource.bullets}
+                  onChange={(e) => setNewResource({ ...newResource, bullets: e.target.value })}
+                  className="w-full h-24 bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                  placeholder="Bullet Points (one per line)..."
+                />
+                <input
+                  type="text"
+                  value={newResource.cta}
+                  onChange={(e) => setNewResource({ ...newResource, cta: e.target.value })}
+                  className="w-full bg-slate-900 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                  placeholder="Button Text (e.g. Talk to an Advisor)"
+                />
+                <button className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl uppercase tracking-widest transition text-xs">
+                  Create Resource Card
+                </button>
+              </form>
+            </div>
+
+            <div className="bg-[#0f1218] rounded-2xl border border-slate-800 overflow-hidden">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-slate-900/60">
+                  <tr className="text-slate-500 text-[10px] font-black uppercase tracking-widest border-b border-slate-800">
+                    <th className="px-5 py-4">Title</th>
+                    <th className="px-5 py-4">Tagline</th>
+                    <th className="px-5 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60">
+                  {resources.map((res) => (
+                    <tr key={res._id} className="hover:bg-white/[0.03] transition">
+                      <td className="px-5 py-4 text-white font-bold">{res.title}</td>
+                      <td className="px-5 py-4 text-slate-500 text-xs">{res.tagline}</td>
+                      <td className="px-5 py-4 text-right">
+                        <button
+                          onClick={() => deleteResource(res._id)}
+                          className="text-slate-600 hover:text-red-500 transition p-1"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {resources.length === 0 && (
+                    <tr>
+                      <td colSpan={3} className="p-10 text-center text-slate-500 text-xs font-bold uppercase tracking-widest">
+                        No resources defined.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
         ) : activeTab === 'careers' ? (
           <div className="max-w-4xl space-y-8">
             <div className="bg-[#0f1218] p-8 rounded-2xl border border-slate-800">
