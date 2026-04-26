@@ -6,6 +6,7 @@ const ResourceSchema = new mongoose.Schema({
   desc: { type: String },
   bullets: { type: String }, // Storing as newline-separated string for easy admin editing
   cta: { type: String, default: 'Learn More' },
+  link: { type: String, default: '/#contact' },
   createdAt: { type: Date, default: Date.now }
 });
 
