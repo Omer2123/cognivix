@@ -69,3 +69,23 @@ export async function DELETE(req) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+export async function PUT(req) {
+  try {
+    const decoded = await checkAuth();
+    if (!decoded) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
+
+    await connectToDatabase();
+    const { id, ...updateData } = await req.json();
+
+    if (!id) {
+      return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+    }
+
+    const updated = await Resource.findByIdAndUpdate(id, updateData, { new: true });
+    return NextResponse.json({ success: true, data: updated });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
