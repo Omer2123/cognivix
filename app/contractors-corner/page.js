@@ -63,7 +63,7 @@ export default function ContractorsCorner() {
           return;
         }
 
-        const res = await fetch(`https://sam.gov/api/prod/sgs/v1/search/?random=${now}&index=ac&page=0&sort=-modifiedDate&size=25&mode=search&responseType=json&domain=ac&q=${activeNaics}&qMode=ALL`);
+        const res = await fetch(`https://sam.gov/api/prod/sgs/v1/search/?random=${now}&index=opp&page=0&size=25&sort=-modifiedDate&mode=search&responseType=json&sfm%5BsimpleSearch%5D%5BkeywordRadio%5D=ALL&sfm%5BsimpleSearch%5D%5BkeywordTags%5D%5B0%5D%5Bvalue%5D=${activeNaics}&sfm%5Bstatus%5D%5Bis_active%5D=true&sfm%5Bdates%5D%5BresponseDue%5D%5BresponseDueSelect%5D=nextMonth&sfm%5Bdates%5D%5BupdatedDate%5D%5BupdatedDateSelect%5D=pastWeek&sfm%5BtypeOfNotice%5D%5B0%5D%5Bkey%5D=s&sfm%5BtypeOfNotice%5D%5B0%5D%5Bvalue%5D=Special%20Notice&sfm%5BtypeOfNotice%5D%5B1%5D%5Bkey%5D=r&sfm%5BtypeOfNotice%5D%5B1%5D%5Bvalue%5D=Sources%20Sought&sfm%5BtypeOfNotice%5D%5B2%5D%5Bkey%5D=p&sfm%5BtypeOfNotice%5D%5B2%5D%5Bvalue%5D=Presolicitation&sfm%5BtypeOfNotice%5D%5B3%5D%5Bkey%5D=o&sfm%5BtypeOfNotice%5D%5B3%5D%5Bvalue%5D=Solicitation&sfm%5BtypeOfNotice%5D%5B4%5D%5Bkey%5D=k&sfm%5BtypeOfNotice%5D%5B4%5D%5Bvalue%5D=Combined%20Synopsis/Solicitation`);
         const data = await res.json();
         if (data && data._embedded && data._embedded.results) {
           setOpportunities(data._embedded.results);
