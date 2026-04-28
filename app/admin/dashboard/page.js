@@ -1267,7 +1267,8 @@ export default function AdvancedDashboard() {
                 </tbody>
               </table>
             </div>
-                 ) : activeTab.startsWith('config-') ? (
+          </div>
+        ) : activeTab.startsWith('config-') ? (
           <div className="max-w-4xl space-y-8">
             <div className="bg-accent p-10 rounded-2xl border border-slate-800">
               <div className="flex items-center justify-between mb-8">
