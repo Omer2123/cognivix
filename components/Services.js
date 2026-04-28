@@ -30,20 +30,20 @@ const homepageServices = [
 
 export default function Services() {
   return (
-    <section id="services" className="bg-white py-24 px-6">
+    <section id="services" className="bg-base py-24 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-black text-slate-900 uppercase tracking-tighter inline-block border-b-4 border-red-600 pb-2">
-            Our Strategic <span className="text-red-600">Services</span>
+          <h2 className="text-4xl font-black text-basetext uppercase tracking-tighter inline-block border-b-4 border-primary pb-2">
+            Our Strategic <span className="text-primary">Services</span>
           </h2>
-          <p className="text-slate-500 mt-4 font-bold uppercase text-xs tracking-widest">
+          <p className="text-basetext/70 mt-4 font-bold uppercase text-xs tracking-widest">
             Delivering Comprehensive Federal & Enterprise Solutions
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {homepageServices.map((service, index) => (
-            <div key={index} className="group relative bg-slate-900 rounded-2xl overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2">
+            <div key={index} className="group relative bg-dark rounded-2xl overflow-hidden shadow-2xl transition-all duration-500 hover:-translate-y-2">
               {/* Service Image with Dark Overlay */}
               <div className="h-64 overflow-hidden relative">
                 <img 
@@ -51,28 +51,28 @@ export default function Services() {
                   alt={service.title} 
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/80 to-transparent"></div>
               </div>
 
               {/* Service Content */}
-              <div className="p-8 relative -mt-20">
-                <h3 className="text-xl font-black text-white uppercase tracking-tight mb-4 group-hover:text-red-600 transition">
+              <div className="p-8 lg:p-10 relative -mt-32 z-10 flex flex-col h-[calc(100%-16rem+8rem)]">
+                <h3 className="text-xl lg:text-2xl font-black text-darktext uppercase tracking-tight mb-6 group-hover:text-primary transition">
                   {service.title}
                 </h3>
-                <p className="text-slate-400 text-xs leading-relaxed mb-6 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-500">
+                <p className="text-basetext/70 text-xs leading-relaxed mb-8 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-500">
                   {service.desc}
                 </p>
                 
                 {/* Tech Tags */}
-                <div className="flex flex-wrap gap-2 mb-8">
+                <div className="flex flex-wrap gap-3 mb-10">
                   {service.tags.map(tag => (
-                    <span key={tag} className="text-[10px] font-black uppercase tracking-widest bg-red-600/10 text-red-500 border border-red-600/20 px-2 py-1 rounded">
+                    <span key={tag} className="text-[10px] font-black uppercase tracking-widest bg-primary/10 text-primary border border-primary/20 px-3 py-1.5 rounded-md">
                       {tag}
                     </span>
                   ))}
                 </div>
 
-                <div className="w-8 h-1 bg-red-600 mb-6 group-hover:w-full transition-all duration-500"></div>
+                <div className="w-8 h-1 bg-primary group-hover:w-full transition-all duration-500 mt-auto"></div>
               </div>
             </div>
           ))}
@@ -81,7 +81,7 @@ export default function Services() {
         <div className="mt-16 text-center">
           <Link 
             href="/services" 
-            className="inline-block bg-slate-900 text-white font-black uppercase text-xs tracking-[0.3em] px-10 py-5 rounded-full hover:bg-red-600 transition-all shadow-xl"
+            className="inline-block bg-dark text-darktext font-black uppercase text-xs tracking-[0.3em] px-10 py-5 rounded-full hover:bg-primary transition-all shadow-xl"
           >
             Explore Full 17-Point Service Matrix →
           </Link>

@@ -121,12 +121,12 @@ export default function ContractorsCorner() {
   };
 
   return (
-    <main className="bg-[#0a0c10] min-h-screen pt-40 pb-20 px-6">
+    <main className="bg-secondary min-h-screen pt-40 pb-20 px-6">
       <div className="max-w-7xl mx-auto">
         {/* Hub Header */}
-        <div className="border-l-4 border-red-600 pl-8 mb-20">
-          <h1 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter">
-            Contractor's <span className="text-red-600">Corner</span>
+        <div className="border-l-4 border-primary pl-8 mb-20">
+          <h1 className="text-5xl md:text-7xl font-black text-darktext uppercase tracking-tighter">
+            Contractor's <span className="text-primary">Corner</span>
           </h1>
           <p className="text-slate-400 font-bold uppercase tracking-[0.2em] mt-4 max-w-2xl">
             Resources, guidance, and tools to help government contractors win, comply, and scale.
@@ -137,28 +137,28 @@ export default function ContractorsCorner() {
         <div className="mb-20">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-3xl font-black text-white uppercase tracking-tight">
-                Live <span className="text-red-600">Opportunities</span>
+              <h2 className="text-3xl font-black text-darktext uppercase tracking-tight">
+                Live <span className="text-primary">Opportunities</span>
               </h2>
               <div className="flex items-center gap-3 mt-2">
                 <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Real-time data from SAM.gov</p>
-                <span className="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span>
+                <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></span>
               </div>
             </div>
             <div className="relative group">
               <select 
                 value={activeNaics}
                 onChange={(e) => setActiveNaics(e.target.value)}
-                className="w-full md:w-[300px] bg-[#0f1218] border border-white/10 text-white text-[10px] font-black uppercase tracking-widest px-6 py-3.5 rounded-xl outline-none focus:border-red-600 transition-all appearance-none pr-12 cursor-pointer shadow-2xl hover:bg-white/[0.05]"
+                className="w-full md:w-[300px] bg-accent border border-white/10 text-darktext text-[10px] font-black uppercase tracking-widest px-6 py-3.5 rounded-xl outline-none focus:border-primary transition-all appearance-none pr-12 cursor-pointer shadow-2xl hover:bg-base/[0.05]"
               >
                 {naicsCodes.map((n) => (
-                  <option key={n._id} value={n.code} className="bg-[#0f1218] text-white py-4">
+                  <option key={n._id} value={n.code} className="bg-accent text-darktext py-4">
                     {n.label || n.code} ({n.code})
                   </option>
                 ))}
               </select>
               {/* Custom Arrow */}
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-red-600 transition-transform group-hover:translate-y-[-40%]">
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-primary transition-transform group-hover:translate-y-[-40%]">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -167,18 +167,18 @@ export default function ContractorsCorner() {
           </div>
 
           {oppLoading ? (
-            <div className="bg-[#0f1218] border border-white/5 rounded-[2rem] p-20 flex justify-center items-center">
+            <div className="bg-accent border border-white/5 rounded-[2rem] p-20 flex justify-center items-center">
               <div className="flex flex-col items-center gap-4">
-                <div className="w-10 h-10 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                 <span className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">Syncing with SAM.gov...</span>
               </div>
             </div>
           ) : (
-            <div className="bg-[#0f1218] border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl">
+            <div className="bg-accent border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl">
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-white/5 bg-white/[0.02]">
+                    <tr className="border-b border-white/5 bg-base/[0.02]">
                       <th className="px-8 py-6 text-slate-400 text-[10px] font-black uppercase tracking-widest">Notice ID / Title</th>
                       <th className="px-8 py-6 text-slate-400 text-[10px] font-black uppercase tracking-widest">Type</th>
                       <th className="px-8 py-6 text-slate-400 text-[10px] font-black uppercase tracking-widest">Department / Agency</th>
@@ -188,15 +188,15 @@ export default function ContractorsCorner() {
                   </thead>
                   <tbody className="divide-y divide-white/5">
                     {opportunities.map((opp) => (
-                      <tr key={opp._id} className="hover:bg-white/[0.02] transition-colors group">
+                      <tr key={opp._id} className="hover:bg-base/[0.02] transition-colors group">
                         <td className="px-8 py-6">
                           <div className="flex flex-col gap-1">
-                            <span className="text-red-600 text-[10px] font-black uppercase tracking-widest">{opp.solicitationNumber || 'N/A'}</span>
-                            <span className="text-white text-sm font-bold line-clamp-1 group-hover:text-red-500 transition-colors">{opp.title}</span>
+                            <span className="text-primary text-[10px] font-black uppercase tracking-widest">{opp.solicitationNumber || 'N/A'}</span>
+                            <span className="text-darktext text-sm font-bold line-clamp-1 group-hover:text-red-500 transition-colors">{opp.title}</span>
                           </div>
                         </td>
                         <td className="px-8 py-6">
-                          <span className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded-full text-slate-300 text-[9px] font-black uppercase tracking-widest">
+                          <span className="inline-block px-3 py-1 bg-base/5 border border-white/10 rounded-full text-slate-300 text-[9px] font-black uppercase tracking-widest">
                             {opp.type?.value || 'Unknown'}
                           </span>
                         </td>
@@ -219,7 +219,7 @@ export default function ContractorsCorner() {
                           <div className="flex flex-col items-end gap-2">
                             <button 
                               onClick={() => { setSelectedOpp(opp); setIsModalOpen(true); }}
-                              className="bg-red-600 hover:bg-red-700 text-white text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-lg transition-all shadow-lg active:scale-95"
+                              className="bg-primary hover:bg-primary/80 text-darktext text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-lg transition-all shadow-lg active:scale-95"
                             >
                               Check Eligibility
                             </button>
@@ -246,35 +246,35 @@ export default function ContractorsCorner() {
 
         {/* Existing Resource Grid */}
         <div className="flex items-center gap-6 mb-10">
-          <h2 className="text-3xl font-black text-white uppercase tracking-tight whitespace-nowrap">
-            Support <span className="text-red-600">Resources</span>
+          <h2 className="text-3xl font-black text-darktext uppercase tracking-tight whitespace-nowrap">
+            Support <span className="text-primary">Resources</span>
           </h2>
-          <div className="h-px w-full bg-gradient-to-r from-red-600/50 to-transparent"></div>
+          <div className="h-px w-full bg-gradient-to-r from-primary/50 to-transparent"></div>
         </div>
         {loading ? (
           <div className="text-center py-20">
-            <div className="inline-block w-12 h-12 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="inline-block w-12 h-12 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-10">
             {resources.map((res, idx) => (
-              <div key={res._id || idx} className="bg-[#0f1218] p-10 rounded-[2rem] border border-white/5 hover:border-red-600/50 transition-all group">
-                <span className="text-red-600 text-xs font-black uppercase tracking-widest">{res.tagline}</span>
-                <h2 className="text-3xl font-black text-white uppercase mt-2 mb-4 group-hover:text-red-500 transition-colors">{res.title}</h2>
+              <div key={res._id || idx} className="bg-accent p-10 rounded-[2rem] border border-white/5 hover:border-primary/50 transition-all group">
+                <span className="text-primary text-xs font-black uppercase tracking-widest">{res.tagline}</span>
+                <h2 className="text-3xl font-black text-darktext uppercase mt-2 mb-4 group-hover:text-red-500 transition-colors">{res.title}</h2>
                 <p className="text-slate-500 text-sm leading-relaxed mb-8">{res.desc}</p>
 
                 {res.bullets && (
                   <ul className="grid grid-cols-1 gap-3 mb-10">
                     {res.bullets.split('\n').map((b, i) => (
                       <li key={i} className="flex items-center gap-3 text-slate-300 text-xs font-bold uppercase tracking-wider">
-                        <span className="w-1.5 h-1.5 bg-red-600 rounded-full"></span> {b}
+                        <span className="w-1.5 h-1.5 bg-primary rounded-full"></span> {b}
                       </li>
                     ))}
                   </ul>
                 )}
 
                 <Link href={res.link || '/#contact'} className="block w-full">
-                  <button className="w-full py-4 bg-white/5 hover:bg-red-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all border border-white/10 group-hover:border-transparent group-hover:shadow-[0_10px_30px_-5px_rgba(220,38,38,0.4)]">
+                  <button className="w-full py-4 bg-base/5 hover:bg-primary text-darktext text-[10px] font-black uppercase tracking-widest rounded-xl transition-all border border-white/10 group-hover:border-transparent group-hover:shadow-[0_10px_30px_-5px_rgba(220,38,38,0.4)]">
                     {res.cta || 'Learn More'}
                   </button>
                 </Link>
@@ -292,17 +292,17 @@ export default function ContractorsCorner() {
         {/* Eligibility Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
-            <div className="bg-[#0f1218] border border-white/10 w-full max-w-lg rounded-[2rem] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
-              <div className="p-8 border-b border-white/5 bg-white/[0.02]">
+            <div className="bg-accent border border-white/10 w-full max-w-lg rounded-[2rem] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
+              <div className="p-8 border-b border-white/5 bg-base/[0.02]">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-red-600 text-[10px] font-black uppercase tracking-widest">Eligibility Assessment</span>
-                  <button onClick={() => setIsModalOpen(false)} className="text-slate-500 hover:text-white transition-colors">
+                  <span className="text-primary text-[10px] font-black uppercase tracking-widest">Eligibility Assessment</span>
+                  <button onClick={() => setIsModalOpen(false)} className="text-slate-500 hover:text-darktext transition-colors">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
                 </div>
-                <h3 className="text-2xl font-black text-white uppercase tracking-tight line-clamp-2">
+                <h3 className="text-2xl font-black text-darktext uppercase tracking-tight line-clamp-2">
                   {selectedOpp?.title}
                 </h3>
               </div>
@@ -315,7 +315,7 @@ export default function ContractorsCorner() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
-                    <h4 className="text-xl font-black text-white uppercase tracking-tight mb-2">Request Received</h4>
+                    <h4 className="text-xl font-black text-darktext uppercase tracking-tight mb-2">Request Received</h4>
                     <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">Our team will get back to you shortly.</p>
                   </div>
                 ) : (
@@ -328,7 +328,7 @@ export default function ContractorsCorner() {
                           type="text" 
                           value={leadForm.name}
                           onChange={(e) => setLeadForm({...leadForm, name: e.target.value})}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-red-600 transition-colors"
+                          className="w-full bg-base/5 border border-white/10 rounded-xl px-4 py-3 text-darktext text-sm outline-none focus:border-primary transition-colors"
                           placeholder="John Doe"
                         />
                       </div>
@@ -339,7 +339,7 @@ export default function ContractorsCorner() {
                           type="email" 
                           value={leadForm.email}
                           onChange={(e) => setLeadForm({...leadForm, email: e.target.value})}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-red-600 transition-colors"
+                          className="w-full bg-base/5 border border-white/10 rounded-xl px-4 py-3 text-darktext text-sm outline-none focus:border-primary transition-colors"
                           placeholder="john@company.com"
                         />
                       </div>
@@ -351,7 +351,7 @@ export default function ContractorsCorner() {
                           type="tel" 
                           value={leadForm.phone}
                           onChange={(e) => setLeadForm({...leadForm, phone: e.target.value})}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-red-600 transition-colors"
+                          className="w-full bg-base/5 border border-white/10 rounded-xl px-4 py-3 text-darktext text-sm outline-none focus:border-primary transition-colors"
                           placeholder="+1 (555) 000-0000"
                         />
                       </div>
@@ -361,14 +361,14 @@ export default function ContractorsCorner() {
                           type="text" 
                           value={leadForm.company}
                           onChange={(e) => setLeadForm({...leadForm, company: e.target.value})}
-                          className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-red-600 transition-colors"
+                          className="w-full bg-base/5 border border-white/10 rounded-xl px-4 py-3 text-darktext text-sm outline-none focus:border-primary transition-colors"
                           placeholder="Defense Corp"
                         />
                       </div>
                     </div>
                     <button 
                       disabled={isSubmitting}
-                      className="w-full bg-red-600 hover:bg-red-700 disabled:bg-red-900 text-white font-black uppercase tracking-widest py-4 rounded-xl transition-all shadow-xl active:scale-95 mt-4"
+                      className="w-full bg-primary hover:bg-primary/80 disabled:bg-red-900 text-darktext font-black uppercase tracking-widest py-4 rounded-xl transition-all shadow-xl active:scale-95 mt-4"
                     >
                       {isSubmitting ? 'Processing...' : 'Submit Assessment'}
                     </button>

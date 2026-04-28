@@ -1,10 +1,10 @@
 export default function MissionSection() {
   return (
-    <section id="mission" className="relative py-24 bg-slate-900 text-white overflow-hidden">
-      <div className="absolute right-0 top-0 w-1/3 h-full bg-red-600/10 -skew-x-12 translate-x-20" />
+    <section id="mission" className="relative py-24 bg-dark text-darktext overflow-hidden">
+      <div className="absolute right-0 top-0 w-1/3 h-full bg-primary/10 -skew-x-12 translate-x-20" />
       <div className="container mx-auto px-6 relative z-10 text-left">
         <div className="max-w-3xl">
-          <h2 className="text-sm font-black text-red-600 uppercase tracking-widest mb-4">Mission Statement</h2>
+          <h2 className="text-sm font-black text-primary uppercase tracking-widest mb-4">Mission Statement</h2>
           <h3 className="text-4xl md:text-5xl font-black mb-8 leading-tight">
             We bridge the gap between technical innovation and federal compliance.
           </h3>
@@ -15,12 +15,12 @@ export default function MissionSection() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
             <div className="flex items-start gap-4">
-              <div className="h-6 w-6 rounded-full bg-red-600 flex-shrink-0" />
-              <p><span className="text-white font-bold">NIST 800-171 Compliance</span> - Following strict federal security guidelines.</p>
+              <div className="h-6 w-6 rounded-full bg-primary flex-shrink-0" />
+              <p><span className="text-darktext font-bold">NIST 800-171 Compliance</span> - Following strict federal security guidelines.</p>
             </div>
             <div className="flex items-start gap-4">
-              <div className="h-6 w-6 rounded-full bg-red-600 flex-shrink-0" />
-              <p><span className="text-white font-bold">CMMC Readiness</span> - Supporting Cyber Maturity Model Certifications.</p>
+              <div className="h-6 w-6 rounded-full bg-primary flex-shrink-0" />
+              <p><span className="text-darktext font-bold">CMMC Readiness</span> - Supporting Cyber Maturity Model Certifications.</p>
             </div>
           </div>
         </div>

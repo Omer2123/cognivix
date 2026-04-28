@@ -8,15 +8,15 @@ export default function Stats() {
   ];
 
   return (
-    <section className="bg-slate-900 py-24 text-white">
+    <section className="bg-dark py-24 text-darktext">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 text-center">
           {stats.map((stat, i) => (
             <div key={i} className="space-y-2 group">
-              <div className="text-5xl md:text-6xl font-black text-red-600 transition-transform group-hover:scale-110 duration-300">
+              <div className="text-5xl md:text-6xl font-black text-primary transition-transform group-hover:scale-110 duration-300">
                 {stat.value}
               </div>
-              <div className="text-xs md:text-sm font-bold uppercase tracking-widest text-gray-400">
+              <div className="text-xs md:text-sm font-bold uppercase tracking-widest text-darktext/70">
                 {stat.label}
               </div>
             </div>

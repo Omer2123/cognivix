@@ -20,7 +20,7 @@ export default function Agencies() {
   }, []);
 
   return (
-    <div className="bg-white py-12 border-b border-slate-200 overflow-hidden">
+    <div className="bg-base py-12 border-b border-slate-200 overflow-hidden">
       <div className="relative group">
         <div className="flex items-center gap-20 animate-marquee whitespace-nowrap w-max px-10">
           {[...agencies, ...agencies, ...agencies].map((agency, idx) => (
@@ -37,7 +37,7 @@ export default function Agencies() {
                   className="h-full w-auto object-contain transition-all duration-500"
                 />
               </div>
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest group-hover/item:text-red-600 transition-colors">
+              <span className="text-[10px] font-black text-basetext/70 uppercase tracking-widest group-hover/item:text-primary transition-colors">
                 {agency.name}
               </span>
             </a>
@@ -45,8 +45,8 @@ export default function Agencies() {
         </div>
         
         {/* Subtle Fade Masks for premium look */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10"></div>
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10"></div>
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-base to-transparent pointer-events-none z-10"></div>
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-base to-transparent pointer-events-none z-10"></div>
       </div>
     </div>
   );

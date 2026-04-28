@@ -1,6 +1,10 @@
 import './globals.css';
 import SiteShell from '@/components/SiteShell';
 import { Analytics } from '@vercel/analytics/next';
+import dbConnect from '@/lib/dbConnect';
+import Config from '@/models/Config';
+
+export const dynamic = 'force-dynamic';
 
 const BASE_URL = 'https://cognivix.in';
 
@@ -129,16 +133,54 @@ const organizationSchema = {
   ],
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  let config = null;
+  try {
+    await dbConnect();
+    config = await Config.findOne();
+  } catch (e) {
+    console.error("Layout config fetch error:", e);
+  }
+
+  const hexToRgb = (hex) => {
+    hex = hex.replace(/^#/, '');
+    if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    return `${r} ${g} ${b}`;
+  };
+
+  const primary = config?.colorPrimary || '#dc2626';
+  const secondary = config?.colorSecondary || '#0a0c10';
+  const accent = config?.colorAccent || '#0f1218';
+  const base = config?.colorBase || '#ffffff';
+  const baseText = config?.colorBaseText || '#0f172a';
+  const dark = config?.colorDark || '#0f172a';
+  const darkText = config?.colorDarkText || '#ffffff';
+
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            :root {
+              --color-primary: ${hexToRgb(primary)};
+              --color-secondary: ${hexToRgb(secondary)};
+              --color-accent: ${hexToRgb(accent)};
+              --color-base: ${hexToRgb(base)};
+              --color-base-text: ${hexToRgb(baseText)};
+              --color-dark: ${hexToRgb(dark)};
+              --color-dark-text: ${hexToRgb(darkText)};
+            }
+          `
+        }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
       </head>
-      <body className="bg-[#0a0c10] antialiased">
+      <body className="bg-secondary antialiased">
         <SiteShell>{children}</SiteShell>
         <Analytics />
       </body>

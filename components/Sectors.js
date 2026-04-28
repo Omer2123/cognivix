@@ -19,16 +19,16 @@ const sectors = [
 
 export default function Sectors() {
   return (
-    <section className="bg-[#0a0c10] py-32 px-6">
+    <section className="bg-secondary py-32 px-6">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-5xl font-black text-white uppercase tracking-tighter mb-16 border-l-8 border-red-600 pl-8">
-          Operational <span className="text-red-600">Sectors</span>
+        <h2 className="text-5xl font-black text-darktext uppercase tracking-tighter mb-16 border-l-8 border-primary pl-8">
+          Operational <span className="text-primary">Sectors</span>
         </h2>
         <div className="grid lg:grid-cols-3 gap-10">
           {sectors.map((s) => (
-            <div key={s.title} className="p-12 bg-[#0f1218] border border-slate-800 rounded-3xl hover:bg-slate-800 transition duration-300">
-              <h3 className="text-2xl font-black text-white mb-6 uppercase">{s.title}</h3>
-              <p className="text-slate-400 mb-8 text-sm leading-relaxed">{s.desc}</p>
+            <div key={s.title} className="p-12 bg-accent border border-slate-800 rounded-3xl hover:bg-slate-800 transition duration-300">
+              <h3 className="text-2xl font-black text-darktext mb-6 uppercase">{s.title}</h3>
+              <p className="text-darktext/70 mb-8 text-sm leading-relaxed">{s.desc}</p>
               <div className="space-y-2">
                 {s.tech.map(t => (
                   <div key={t} className="text-[10px] font-bold text-red-500 uppercase tracking-widest border-b border-slate-800 pb-2">

@@ -8,12 +8,12 @@ const stats = [
 
 export default function InfrastructureStats() {
   return (
-    <div className="bg-[#0f1218] py-20 border-y border-slate-800">
+    <div className="bg-accent py-20 border-y border-slate-800">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12">
         {stats.map((s) => (
           <div key={s.label} className="text-center">
-            <p className="text-4xl font-black text-white mb-2">{s.value}</p>
-            <p className="text-red-600 text-[10px] font-black uppercase tracking-[0.2em]">{s.label}</p>
+            <p className="text-4xl font-black text-darktext mb-2">{s.value}</p>
+            <p className="text-primary text-[10px] font-black uppercase tracking-[0.2em]">{s.label}</p>
           </div>
         ))}
       </div>

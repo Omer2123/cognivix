@@ -1,5 +1,9 @@
-'use client';
 import Link from 'next/link';
+import dbConnect from '@/lib/dbConnect';
+import { unstable_noStore as noStore } from 'next/cache';
+
+export const dynamic = 'force-dynamic';
+import Config from '@/models/Config';
 
 const serviceData = [
   {
@@ -107,7 +111,7 @@ const serviceData = [
   {
     category: "DATA, AI & ANALYTICS",
     icon: "📊",
-    image: "https://images.unsplash.com/photo-1551288049-bbda38a5f977?auto=format&fit=crop&q=80&w=1000",
+    image: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&q=80&w=1000",
     items: [
       {
         title: "13. Data Services",
@@ -152,13 +156,24 @@ const serviceData = [
   }
 ];
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  noStore();
+  let config = null;
+  try {
+    await dbConnect();
+    config = await Config.findOne();
+  } catch (error) {
+    console.error("Config fetch error:", error);
+  }
+  const isGrayscale = config ? config.servicesGrayscaleBanners : true;
+  const bannerOpacity = config && typeof config.servicesBannerOpacity === 'number' ? config.servicesBannerOpacity / 10 : 0.3;
+
   return (
-    <main className="bg-[#0a0c10] min-h-screen pt-32 pb-20 px-6 text-white">
+    <main className="bg-secondary min-h-screen pt-32 pb-20 px-6 text-darktext">
       <div className="max-w-7xl mx-auto">
-        <div className="border-l-4 border-red-600 pl-8 mb-20">
+        <div className="border-l-4 border-primary pl-8 mb-20">
           <h1 className="text-6xl font-black uppercase tracking-tighter">
-            Cognivix <span className="text-red-600">Enterprise Services</span>
+            Cognivix <span className="text-primary">Enterprise Services</span>
           </h1>
           <p className="text-slate-500 font-bold uppercase tracking-widest mt-4">Full-Spectrum IT Solutions & Government Support</p>
         </div>
@@ -171,9 +186,10 @@ export default function ServicesPage() {
                 <img 
                   src={group.image} 
                   alt={group.category}
-                  className="w-full h-full object-cover opacity-30 grayscale hover:grayscale-0 transition-all duration-700 hover:scale-105"
+                  className={`w-full h-full object-cover hover:grayscale-0 transition-all duration-700 hover:scale-105 ${isGrayscale ? 'grayscale' : ''}`}
+                  style={{ opacity: bannerOpacity }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#0a0c10] via-transparent to-transparent flex items-center px-10">
+                <div className="absolute inset-0 bg-gradient-to-r from-secondary via-transparent to-transparent flex items-center px-10">
                   <div className="flex items-center gap-6">
                     <span className="text-5xl">{group.icon}</span>
                     <h2 className="text-4xl font-black tracking-tight uppercase">{group.category}</h2>
@@ -186,13 +202,13 @@ export default function ServicesPage() {
                   <Link 
                     href={item.href || '#'} 
                     key={i} 
-                    className="bg-[#0f1218] p-8 rounded-3xl border border-slate-800 hover:border-red-600 transition group shadow-xl block cursor-pointer"
+                    className="bg-accent p-8 rounded-3xl border border-slate-800 hover:border-primary transition group shadow-xl block cursor-pointer"
                   >
-                    <h3 className="text-xl font-bold text-red-600 mb-6 uppercase tracking-tight group-hover:text-white transition-colors">{item.title}</h3>
+                    <h3 className="text-xl font-bold text-primary mb-6 uppercase tracking-tight group-hover:text-darktext transition-colors">{item.title}</h3>
                     <ul className="space-y-3">
                       {item.list.map((li, j) => (
                         <li key={j} className="text-slate-400 text-sm flex items-start gap-3 group-hover:text-slate-300 transition-colors">
-                          <span className="w-1.5 h-1.5 bg-red-600 rounded-full mt-1.5 shrink-0 shadow-[0_0_8px_rgba(220,38,38,0.5)] group-hover:bg-white transition-colors"></span>
+                          <span className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 shrink-0 shadow-[0_0_8px_rgba(220,38,38,0.5)] group-hover:bg-base transition-colors"></span>
                           {li}
                         </li>
                       ))}
