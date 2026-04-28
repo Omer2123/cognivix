@@ -23,6 +23,8 @@ export default function AdvancedDashboard() {
   const [editingId, setEditingId] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [themePresets, setThemePresets] = useState([]);
+  const [newThemeName, setNewThemeName] = useState('');
   const [initialConfig, setInitialConfig] = useState(null);
   const [config, setConfig] = useState({ 
     servicesGrayscaleBanners: true, 
@@ -82,6 +84,10 @@ export default function AdvancedDashboard() {
       console.error('Failed to fetch config');
     }
 
+    const themesRes = await fetch('/api/admin/themes');
+    const themesData = await themesRes.json();
+    if (themesData.success) setThemePresets(themesData.data);
+
     setLoading(false);
   };
 
@@ -104,6 +110,43 @@ export default function AdvancedDashboard() {
       }
     } catch (e) {
       alert('Failed to save config');
+    }
+  };
+
+  const saveThemePreset = async () => {
+    if (!newThemeName) return alert('Please enter a theme name');
+    const res = await fetch('/api/admin/themes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: newThemeName, config })
+    });
+    const data = await res.json();
+    if (data.success) {
+      setThemePresets([data.data, ...themePresets]);
+      setNewThemeName('');
+      alert('Theme preset saved successfully!');
+    } else {
+      alert(data.error || 'Failed to save theme');
+    }
+  };
+
+  const applyThemePreset = (preset) => {
+    if (confirm(`Apply "${preset.name}"? This will update your current editor view (you still need to click "Save All Changes" to apply it to the live site).`)) {
+      // Create a clean config object from the preset
+      const { _id, __v, createdAt, updatedAt, ...cleanConfig } = preset.config;
+      setConfig(cleanConfig);
+    }
+  };
+
+  const deleteThemePreset = async (id) => {
+    if (!confirm('Delete this theme preset?')) return;
+    const res = await fetch('/api/admin/themes', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id })
+    });
+    if (res.ok) {
+      setThemePresets(themePresets.filter(p => p._id !== id));
     }
   };
 
@@ -1468,6 +1511,65 @@ export default function AdvancedDashboard() {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* Section: Theme Presets */}
+            <div className="bg-accent p-8 rounded-2xl border border-slate-800 shadow-xl">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-6">
+                <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest">Saved Theme Presets</h4>
+                <div className="flex items-center gap-3">
+                  <input 
+                    type="text"
+                    value={newThemeName}
+                    onChange={(e) => setNewThemeName(e.target.value)}
+                    placeholder="New Theme Name..."
+                    className="bg-dark border border-slate-800 px-4 py-2 rounded-lg text-xs outline-none focus:border-primary transition w-48"
+                  />
+                  <button 
+                    onClick={saveThemePreset}
+                    className="bg-slate-800 hover:bg-slate-700 text-darktext text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-widest transition"
+                  >
+                    Save Current
+                  </button>
+                </div>
+              </div>
+
+              {themePresets.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {themePresets.map((preset) => (
+                    <div key={preset._id} className="bg-dark border border-slate-800 p-4 rounded-xl flex items-center justify-between group">
+                      <div>
+                        <p className="text-darktext font-bold text-sm mb-1">{preset.name}</p>
+                        <div className="flex gap-1">
+                          <div className="w-3 h-3 rounded-full border border-slate-700" style={{ backgroundColor: preset.config.colorPrimary }} title="Primary" />
+                          <div className="w-3 h-3 rounded-full border border-slate-700" style={{ backgroundColor: preset.config.colorSecondary }} title="Secondary" />
+                          <div className="w-3 h-3 rounded-full border border-slate-700" style={{ backgroundColor: preset.config.colorDark }} title="Dark" />
+                        </div>
+                      </div>
+                      <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button 
+                          onClick={() => applyThemePreset(preset)}
+                          className="p-2 text-primary hover:bg-primary/10 rounded-lg transition"
+                          title="Apply Theme"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
+                        </button>
+                        <button 
+                          onClick={() => deleteThemePreset(preset._id)}
+                          className="p-2 text-slate-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition"
+                          title="Delete Theme"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-10 bg-dark/50 border border-dashed border-slate-800 rounded-xl">
+                  <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">No saved themes yet</p>
+                </div>
+              )}
             </div>
           </div>
           );
