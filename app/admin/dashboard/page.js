@@ -23,6 +23,7 @@ export default function AdvancedDashboard() {
   const [editingId, setEditingId] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [hasConfigChanges, setHasConfigChanges] = useState(false);
   const [config, setConfig] = useState({ 
     servicesGrayscaleBanners: true, 
     servicesBannerOpacity: 3,
@@ -85,6 +86,7 @@ export default function AdvancedDashboard() {
 
   const updateConfig = (key, value) => {
     setConfig({ ...config, [key]: value });
+    setHasConfigChanges(true);
   };
 
   const saveConfig = async () => {
@@ -96,6 +98,7 @@ export default function AdvancedDashboard() {
       });
       if (res.ok) {
         alert('Global configurations saved successfully.');
+        setHasConfigChanges(false);
       } else {
         alert('Failed to save configuration.');
       }
@@ -1257,9 +1260,14 @@ export default function AdvancedDashboard() {
               <h3 className="text-xl font-black text-darktext uppercase tracking-tighter">Global Config</h3>
               <button 
                 onClick={saveConfig}
-                className="bg-primary hover:bg-primary/80 text-darktext font-black px-8 py-3 rounded-xl uppercase tracking-widest transition text-xs shadow-lg shadow-primary/20"
+                disabled={!hasConfigChanges}
+                className={`px-8 py-3 rounded-xl uppercase tracking-widest transition text-xs shadow-lg ${
+                  hasConfigChanges 
+                  ? 'bg-primary hover:bg-primary/80 text-darktext cursor-pointer shadow-primary/20' 
+                  : 'bg-slate-800 text-slate-500 cursor-not-allowed opacity-50'
+                }`}
               >
-                Save All Changes
+                {hasConfigChanges ? 'Save All Changes' : 'No Changes to Save'}
               </button>
             </div>
 
