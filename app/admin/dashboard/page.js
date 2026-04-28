@@ -1268,7 +1268,7 @@ export default function AdvancedDashboard() {
               <div className="mb-8">
                 <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-3 mb-5">Services / Banner</h4>
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between bg-dark border border-slate-800 p-5 rounded-xl relative group">
+                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
                     <div>
                       <label className="text-darktext font-bold block mb-1">Grayscale Services Banners</label>
                     <button 
@@ -1278,7 +1278,7 @@ export default function AdvancedDashboard() {
                     >
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     </button>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Toggle grayscale filter on /services page headers</p>
+                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Toggle grayscale filter on /services page headers</p>
                     </div>
                     <button
                       onClick={() => updateConfig('servicesGrayscaleBanners', !config.servicesGrayscaleBanners)}
@@ -1297,7 +1297,7 @@ export default function AdvancedDashboard() {
                     >
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     </button>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Adjust the banner background opacity (1-10)</p>
+                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Adjust the banner background opacity (1-10)</p>
                     </div>
                     <div className="flex items-center gap-4">
                       <input 
@@ -1317,8 +1317,8 @@ export default function AdvancedDashboard() {
               {/* Section: Global Branding */}
               <div className="mb-8">
                 <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-3 mb-5">Site / Branding</h4>
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between bg-dark border border-slate-800 p-5 rounded-xl relative group">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
                     <div>
                       <label className="text-darktext font-bold block mb-1">Primary Color</label>
                     <button 
@@ -1328,16 +1328,16 @@ export default function AdvancedDashboard() {
                     >
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     </button>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Main accent color used for highlights and buttons</p>
+                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Main accent color used for highlights and buttons</p>
                     </div>
                     <input 
                       type="color" 
                       value={config.colorPrimary || '#dc2626'} 
                       onChange={(e) => updateConfig('colorPrimary', e.target.value)}
-                      className="w-12 h-12 rounded cursor-pointer border-none outline-none bg-transparent"
+                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
                     />
                   </div>
-                  <div className="flex items-center justify-between bg-dark border border-slate-800 p-5 rounded-xl relative group">
+                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
                     <div>
                       <label className="text-darktext font-bold block mb-1">Secondary Color</label>
                     <button 
@@ -1347,16 +1347,16 @@ export default function AdvancedDashboard() {
                     >
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     </button>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Main background color used across the site</p>
+                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Main background color used across the site</p>
                     </div>
                     <input 
                       type="color" 
                       value={config.colorSecondary || '#0a0c10'} 
                       onChange={(e) => updateConfig('colorSecondary', e.target.value)}
-                      className="w-12 h-12 rounded cursor-pointer border-none outline-none bg-transparent"
+                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
                     />
                   </div>
-                  <div className="flex items-center justify-between bg-dark border border-slate-800 p-5 rounded-xl relative group">
+                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
                     <div>
                       <label className="text-darktext font-bold block mb-1">Accent Color</label>
                     <button 
@@ -1366,13 +1366,13 @@ export default function AdvancedDashboard() {
                     >
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     </button>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Slightly lighter background used for cards and elements</p>
+                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Slightly lighter background used for cards and elements</p>
                     </div>
                     <input 
                       type="color" 
                       value={config.colorAccent || '#0f1218'} 
                       onChange={(e) => updateConfig('colorAccent', e.target.value)}
-                      className="w-12 h-12 rounded cursor-pointer border-none outline-none bg-transparent"
+                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
                     />
                   </div>
                 </div>
@@ -1381,8 +1381,8 @@ export default function AdvancedDashboard() {
               {/* Section: Structural Colors */}
               <div className="mb-8">
                 <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-3 mb-5">Structural Colors</h4>
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between bg-dark border border-slate-800 p-5 rounded-xl relative group">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
                     <div>
                       <label className="text-darktext font-bold block mb-1">Base Background</label>
                     <button 
@@ -1392,16 +1392,16 @@ export default function AdvancedDashboard() {
                     >
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     </button>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Main background for light sections (e.g. homepage)</p>
+                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Main background for light sections (e.g. homepage)</p>
                     </div>
                     <input 
                       type="color" 
                       value={config.colorBase || '#ffffff'} 
                       onChange={(e) => updateConfig('colorBase', e.target.value)}
-                      className="w-12 h-12 rounded cursor-pointer border-none outline-none bg-transparent"
+                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
                     />
                   </div>
-                  <div className="flex items-center justify-between bg-dark border border-slate-800 p-5 rounded-xl relative group">
+                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
                     <div>
                       <label className="text-darktext font-bold block mb-1">Base Text Color</label>
                     <button 
@@ -1411,16 +1411,16 @@ export default function AdvancedDashboard() {
                     >
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     </button>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Text color for light sections</p>
+                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Text color for light sections</p>
                     </div>
                     <input 
                       type="color" 
                       value={config.colorBaseText || '#0f172a'} 
                       onChange={(e) => updateConfig('colorBaseText', e.target.value)}
-                      className="w-12 h-12 rounded cursor-pointer border-none outline-none bg-transparent"
+                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
                     />
                   </div>
-                  <div className="flex items-center justify-between bg-dark border border-slate-800 p-5 rounded-xl relative group">
+                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
                     <div>
                       <label className="text-darktext font-bold block mb-1">Dark Background</label>
                     <button 
@@ -1430,16 +1430,16 @@ export default function AdvancedDashboard() {
                     >
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     </button>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Main background for dark sections</p>
+                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Main background for dark sections</p>
                     </div>
                     <input 
                       type="color" 
                       value={config.colorDark || '#0f172a'} 
                       onChange={(e) => updateConfig('colorDark', e.target.value)}
-                      className="w-12 h-12 rounded cursor-pointer border-none outline-none bg-transparent"
+                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
                     />
                   </div>
-                  <div className="flex items-center justify-between bg-dark border border-slate-800 p-5 rounded-xl relative group">
+                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
                     <div>
                       <label className="text-darktext font-bold block mb-1">Dark Text Color</label>
                     <button 
@@ -1449,13 +1449,13 @@ export default function AdvancedDashboard() {
                     >
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     </button>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Text color for dark sections</p>
+                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Text color for dark sections</p>
                     </div>
                     <input 
                       type="color" 
                       value={config.colorDarkText || '#ffffff'} 
                       onChange={(e) => updateConfig('colorDarkText', e.target.value)}
-                      className="w-12 h-12 rounded cursor-pointer border-none outline-none bg-transparent"
+                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
                     />
                   </div>
                 </div>
