@@ -155,7 +155,7 @@ export default async function RootLayout({ children }) {
   const accent = config?.colorAccent || '#0f1218';
   const base = config?.colorBase || '#ffffff';
   const baseText = config?.colorBaseText || '#0f172a';
-  const dark = config?.colorDark || '#020617';
+  const dark = config?.colorDark || '#0f172a';
   const darkText = config?.colorDarkText || '#ffffff';
 
   return (

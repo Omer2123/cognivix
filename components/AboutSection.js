@@ -19,7 +19,7 @@ export default function AboutSection() {
 
           {/* Right: Content Section */}
           <div className="lg:w-1/2 space-y-8">
-            <h2 className="text-4xl font-extrabold text-gray-900 leading-tight">
+            <h2 className="text-4xl font-extrabold text-basetext leading-tight">
               Built to Help Government Contractors Win, Comply, and Scale
             </h2>
             <p className="text-lg text-basetext/70 leading-relaxed">
@@ -30,15 +30,15 @@ export default function AboutSection() {
 
             {/* Mission & Vision Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="p-6 bg-dark text-darktext rounded-lg shadow-md border-t-4 border-primary">
+              <div className="p-6 bg-accent text-darktext rounded-lg shadow-md border-t-4 border-primary">
                 <h4 className="text-xl font-bold mb-2">Our Vision</h4>
-                <p className="text-sm text-basetext/70">
+                <p className="text-sm text-darktext/70">
                   To become the most trusted growth partner for U.S. federal contractors, known for precision and results.
                 </p>
               </div>
-              <div className="p-6 bg-dark text-darktext rounded-lg shadow-md border-t-4 border-primary">
+              <div className="p-6 bg-accent text-darktext rounded-lg shadow-md border-t-4 border-primary">
                 <h4 className="text-xl font-bold mb-2">Our Mission</h4>
-                <p className="text-sm text-basetext/70">
+                <p className="text-sm text-darktext/70">
                   To help government contractors win more federal opportunities by delivering compliant proposals and specialized talent.
                 </p>
               </div>

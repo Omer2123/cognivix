@@ -1424,7 +1424,7 @@ export default function AdvancedDashboard() {
                     <div>
                       <label className="text-darktext font-bold block mb-1">Dark Background</label>
                     <button 
-                      onClick={() => updateConfig('colorDark', '#020617')}
+                      onClick={() => updateConfig('colorDark', '#0f172a')}
                       className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
                       title="Restore Default"
                     >
@@ -1434,7 +1434,7 @@ export default function AdvancedDashboard() {
                     </div>
                     <input 
                       type="color" 
-                      value={config.colorDark || '#020617'} 
+                      value={config.colorDark || '#0f172a'} 
                       onChange={(e) => updateConfig('colorDark', e.target.value)}
                       className="w-12 h-12 rounded cursor-pointer border-none outline-none bg-transparent"
                     />
