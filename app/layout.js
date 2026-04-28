@@ -1,6 +1,7 @@
 import './globals.css';
 import SiteShell from '@/components/SiteShell';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import dbConnect from '@/lib/dbConnect';
 import Config from '@/models/Config';
 
@@ -183,6 +184,7 @@ export default async function RootLayout({ children }) {
       <body className="bg-secondary antialiased">
         <SiteShell>{children}</SiteShell>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
