@@ -77,11 +77,11 @@ export default function CareersPage() {
   };
 
   return (
-    <main className="bg-[#0a0c10] min-h-screen pt-40 pb-20 px-6">
+    <main className="bg-secondary min-h-screen pt-40 pb-20 px-6">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-black text-white uppercase tracking-tighter mb-6">
-            Join the <span className="text-red-600">Elite</span>
+          <h1 className="text-5xl md:text-6xl font-black text-darktext uppercase tracking-tighter mb-6">
+            Join the <span className="text-primary">Elite</span>
           </h1>
           <p className="text-slate-400 uppercase font-bold tracking-[0.2em] text-[10px] md:text-xs">
             We are looking for cleared professionals and technical experts.
@@ -90,27 +90,27 @@ export default function CareersPage() {
 
         {loading ? (
           <div className="text-center py-20">
-            <div className="inline-block w-8 h-8 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="inline-block w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
           </div>
         ) : jobs.length > 0 ? (
           <div className="space-y-6">
             {jobs.map((job) => (
-              <div key={job._id} className="group bg-[#0f1218] border border-slate-800 p-8 rounded-3xl hover:border-red-600/50 transition-all duration-500 hover:shadow-[0_20px_50px_-20px_rgba(220,38,38,0.15)]">
+              <div key={job._id} className="group bg-accent border border-slate-800 p-8 rounded-3xl hover:border-primary/50 transition-all duration-500 hover:shadow-[0_20px_50px_-20px_rgba(220,38,38,0.15)]">
                 <div className="flex flex-wrap justify-between items-start gap-6 mb-6">
                   <div>
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="text-[10px] font-black bg-red-600 text-white px-3 py-1 rounded-full uppercase tracking-widest">
+                      <span className="text-[10px] font-black bg-primary text-darktext px-3 py-1 rounded-full uppercase tracking-widest">
                         {job.type}
                       </span>
                       <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
                         {job.department}
                       </span>
                     </div>
-                    <h2 className="text-2xl font-black text-white uppercase tracking-tight group-hover:text-red-500 transition-colors">
+                    <h2 className="text-2xl font-black text-darktext uppercase tracking-tight group-hover:text-red-500 transition-colors">
                       {job.title}
                     </h2>
                     <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mt-1 flex items-center gap-2">
-                      <svg className="w-3 h-3 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                       </svg>
                       {job.location}
@@ -118,7 +118,7 @@ export default function CareersPage() {
                   </div>
                   <button 
                     onClick={() => setSelectedJob(job)}
-                    className="bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-widest px-8 py-4 rounded-xl transition shadow-[0_10px_20px_-5px_rgba(220,38,38,0.3)]"
+                    className="bg-primary hover:bg-primary/80 text-darktext text-[10px] font-black uppercase tracking-widest px-8 py-4 rounded-xl transition shadow-[0_10px_20px_-5px_rgba(220,38,38,0.3)]"
                   >
                     Apply Now
                   </button>
@@ -134,7 +134,7 @@ export default function CareersPage() {
                       <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         {job.requirements.split('\n').map((req, i) => (
                           <li key={i} className="text-slate-500 text-xs flex items-center gap-2">
-                            <span className="w-1 h-1 bg-red-600 rounded-full" />
+                            <span className="w-1 h-1 bg-primary rounded-full" />
                             {req}
                           </li>
                         ))}
@@ -146,12 +146,12 @@ export default function CareersPage() {
             ))}
           </div>
         ) : (
-          <div className="bg-[#0f1218] border border-dashed border-slate-700 p-16 rounded-[3rem] text-center">
-            <h2 className="text-2xl font-black text-white uppercase mb-4">No Active Openings</h2>
+          <div className="bg-accent border border-dashed border-slate-700 p-16 rounded-[3rem] text-center">
+            <h2 className="text-2xl font-black text-darktext uppercase mb-4">No Active Openings</h2>
             <p className="text-slate-500 text-sm mb-8 italic">
               "Our team is currently at full capacity for active mission support, but we are always scouting for top-tier cybersecurity talent."
             </p>
-            <button className="bg-white/5 border border-white/10 px-8 py-4 rounded-xl text-white font-black uppercase text-[10px] tracking-[0.3em] hover:bg-red-600 transition">
+            <button className="bg-base/5 border border-white/10 px-8 py-4 rounded-xl text-darktext font-black uppercase text-[10px] tracking-[0.3em] hover:bg-primary transition">
               Submit CV for Future Operations
             </button>
           </div>
@@ -162,25 +162,25 @@ export default function CareersPage() {
       {selectedJob && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
           <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={() => setSelectedJob(null)}></div>
-          <div className="relative w-full max-w-xl bg-[#0f1218] border border-slate-800 rounded-[2.5rem] overflow-hidden animate-in fade-in zoom-in duration-300">
+          <div className="relative w-full max-w-xl bg-accent border border-slate-800 rounded-[2.5rem] overflow-hidden animate-in fade-in zoom-in duration-300">
             {submitted ? (
               <div className="p-16 text-center">
-                <div className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-8">
-                  <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-8">
+                  <svg className="w-10 h-10 text-darktext" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-4">Mission Received</h3>
+                <h3 className="text-3xl font-black text-darktext uppercase tracking-tighter mb-4">Mission Received</h3>
                 <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">Our recruitment team will review your dossier.</p>
               </div>
             ) : (
               <div className="p-10 md:p-12">
                 <div className="flex justify-between items-start mb-8">
                   <div>
-                    <span className="text-[10px] font-black text-red-600 uppercase tracking-widest block mb-2">Applying for</span>
-                    <h3 className="text-3xl font-black text-white uppercase tracking-tighter leading-none">{selectedJob.title}</h3>
+                    <span className="text-[10px] font-black text-primary uppercase tracking-widest block mb-2">Applying for</span>
+                    <h3 className="text-3xl font-black text-darktext uppercase tracking-tighter leading-none">{selectedJob.title}</h3>
                   </div>
-                  <button onClick={() => setSelectedJob(null)} className="text-slate-500 hover:text-white transition">
+                  <button onClick={() => setSelectedJob(null)} className="text-slate-500 hover:text-darktext transition">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -193,7 +193,7 @@ export default function CareersPage() {
                       required
                       type="text"
                       placeholder="Full Name"
-                      className="bg-slate-900/50 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                      className="bg-dark/50 border border-slate-800 p-4 rounded-xl text-darktext outline-none focus:border-primary transition"
                       value={appForm.name}
                       onChange={(e) => setAppForm({ ...appForm, name: e.target.value })}
                     />
@@ -201,7 +201,7 @@ export default function CareersPage() {
                       required
                       type="email"
                       placeholder="Email Address"
-                      className="bg-slate-900/50 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                      className="bg-dark/50 border border-slate-800 p-4 rounded-xl text-darktext outline-none focus:border-primary transition"
                       value={appForm.email}
                       onChange={(e) => setAppForm({ ...appForm, email: e.target.value })}
                     />
@@ -209,7 +209,7 @@ export default function CareersPage() {
                   <input
                     type="text"
                     placeholder="Phone Number (Optional)"
-                    className="w-full bg-slate-900/50 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition"
+                    className="w-full bg-dark/50 border border-slate-800 p-4 rounded-xl text-darktext outline-none focus:border-primary transition"
                     value={appForm.phone}
                     onChange={(e) => setAppForm({ ...appForm, phone: e.target.value })}
                   />
@@ -222,8 +222,8 @@ export default function CareersPage() {
                       onChange={(e) => setCvFile(e.target.files[0])}
                       className="absolute inset-0 opacity-0 cursor-pointer z-10"
                     />
-                    <div className="bg-slate-900/30 border border-dashed border-slate-700 p-8 rounded-xl text-center group-hover:border-red-600/50 transition-all">
-                      <svg className="w-8 h-8 text-slate-500 mx-auto mb-3 group-hover:text-red-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="bg-dark/30 border border-dashed border-slate-700 p-8 rounded-xl text-center group-hover:border-primary/50 transition-all">
+                      <svg className="w-8 h-8 text-slate-500 mx-auto mb-3 group-hover:text-primary transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                       </svg>
                       <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">
@@ -234,14 +234,14 @@ export default function CareersPage() {
 
                   <textarea
                     placeholder="Briefly describe your expertise..."
-                    className="w-full h-32 bg-slate-900/50 border border-slate-800 p-4 rounded-xl text-white outline-none focus:border-red-600 transition resize-none"
+                    className="w-full h-32 bg-dark/50 border border-slate-800 p-4 rounded-xl text-darktext outline-none focus:border-primary transition resize-none"
                     value={appForm.message}
                     onChange={(e) => setAppForm({ ...appForm, message: e.target.value })}
                   />
 
                   <button
                     disabled={isSubmitting}
-                    className="w-full bg-red-600 hover:bg-red-700 disabled:bg-slate-800 text-white font-black py-5 rounded-xl uppercase tracking-[0.2em] transition text-xs shadow-[0_15px_30px_-10px_rgba(220,38,38,0.5)]"
+                    className="w-full bg-primary hover:bg-primary/80 disabled:bg-slate-800 text-darktext font-black py-5 rounded-xl uppercase tracking-[0.2em] transition text-xs shadow-[0_15px_30px_-10px_rgba(220,38,38,0.5)]"
                   >
                     {isSubmitting ? 'Transmitting Data...' : 'Submit Application'}
                   </button>

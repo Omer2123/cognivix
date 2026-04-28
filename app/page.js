@@ -14,7 +14,7 @@ import Footer from '@/components/TechnicalFooter';
 
 function MissionSection() {
   return (
-    <section id="mission" className="relative py-24 bg-slate-900 text-white overflow-hidden">
+    <section id="mission" className="relative py-24 bg-dark text-darktext overflow-hidden">
       {/* Visual Image Addition for the Mission Section */}
       <div 
         className="absolute right-0 top-0 w-1/2 h-full opacity-20 grayscale pointer-events-none"
@@ -23,27 +23,27 @@ function MissionSection() {
           backgroundSize: 'cover'
         }}
       />
-      <div className="absolute right-0 top-0 w-1/3 h-full bg-red-600/10 -skew-x-12 translate-x-20" />
+      <div className="absolute right-0 top-0 w-1/3 h-full bg-primary/10 -skew-x-12 translate-x-20" />
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-3xl">
-          <h2 className="text-sm font-bold text-red-600 uppercase tracking-widest mb-4 italic">// Mission Statement</h2>
+          <h2 className="text-sm font-bold text-primary uppercase tracking-widest mb-4 italic">// Mission Statement</h2>
           <h3 className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
             We bridge the gap between technical innovation and federal compliance.
           </h3>
-          <p className="text-lg text-gray-400 leading-relaxed mb-12">
+          <p className="text-lg text-darktext/70 leading-relaxed mb-12">
             In an era of rising cyber threats and stringent regulatory requirements, 
             Cognivix IT Solutions ensures that prime contractors and federal agencies have access 
             to verified, cleared, and highly skilled technical talent.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
             <div className="flex items-start gap-4">
-              <div className="h-6 w-6 rounded-full bg-red-600 flex-shrink-0" />
-              <p><span className="text-white font-bold">NIST 800-171 Compliance</span> - Internal data handling follows strict federal security guidelines.</p>
+              <div className="h-6 w-6 rounded-full bg-primary flex-shrink-0" />
+              <p><span className="text-darktext font-bold">NIST 800-171 Compliance</span> - Internal data handling follows strict federal security guidelines.</p>
             </div>
             <div className="flex items-start gap-4">
-              <div className="h-6 w-6 rounded-full bg-red-600 flex-shrink-0" />
-              <p><span className="text-white font-bold">CMMC Readiness</span> - Ready to support contractors in meeting Cyber Maturity Model Certifications.</p>
+              <div className="h-6 w-6 rounded-full bg-primary flex-shrink-0" />
+              <p><span className="text-darktext font-bold">CMMC Readiness</span> - Ready to support contractors in meeting Cyber Maturity Model Certifications.</p>
             </div>
           </div>
         </div>
@@ -64,11 +64,11 @@ export default function Home() {
   ];
 
   return (
-    <main className="min-h-screen bg-white scroll-smooth w-full overflow-x-hidden">
+    <main className="min-h-screen bg-base scroll-smooth w-full overflow-x-hidden">
       <Navbar />
       
       {/* 1. Hero Section - FULL WIDTH NO SIDE GAPS */}
-      <section className="relative h-[85vh] w-full flex items-center text-white overflow-hidden bg-slate-950">
+      <section className="relative h-[85vh] w-full flex items-center text-darktext overflow-hidden bg-dark">
         <div className="absolute inset-0 z-0 w-full h-full">
           <Swiper
             modules={[Autoplay]}
@@ -93,25 +93,25 @@ export default function Home() {
           </Swiper>
         </div>
 
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-dark via-dark/80 to-transparent z-10 pointer-events-none" />
         
         <div className="container mx-auto px-6 relative z-20">
           <div className="max-w-4xl space-y-8">
-            {/* <div className="inline-block px-90 py-1 border border-red-600 text-red-600 text-xs font-bold uppercase tracking-widest bg-slate-900/50 backdrop-blur-sm">
+            {/* <div className="inline-block px-90 py-1 border border-primary text-primary text-xs font-bold uppercase tracking-widest bg-dark/50 backdrop-blur-sm">
               Est. 2026 | Federal Staffing & Capture
             </div> */}
             <h1 className="text-20xl md:text-90xl font-black leading-[1] uppercase tracking-tighter drop-shadow-lg">
               The Standard in <br />
-              <span className="text-red-600 underline decoration-4 underline-offset-8">Federal</span> Growth
+              <span className="text-primary underline decoration-4 underline-offset-8">Federal</span> Growth
             </h1>
-            <p className="text-xl text-gray-200 max-w-lg leading-relaxed border-l-4 border-red-600 pl-6 drop-shadow-md">
+            <p className="text-xl text-darktext/80 max-w-lg leading-relaxed border-l-4 border-primary pl-6 drop-shadow-md">
               Providing technical proposal leadership and cleared staffing for contractors who cannot afford to lose in the federal marketplace.
             </p>
             <div className="flex flex-wrap gap-6 pt-4">
-              <a href="#contact" className="bg-red-600 hover:bg-red-700 px-10 py-4 text-lg font-black uppercase transition-all shadow-2xl active:scale-95 text-center">
+              <a href="#contact" className="bg-primary hover:bg-primary/80 px-10 py-4 text-lg font-black uppercase transition-all shadow-2xl active:scale-95 text-center">
                 Partner With Us
               </a>
-              <a href="#capabilities" className="border-2 border-white hover:bg-white hover:text-slate-900 px-10 py-3 text-lg font-black uppercase transition-all text-center">
+              <a href="#capabilities" className="border-2 border-white hover:bg-base hover:text-basetext px-10 py-3 text-lg font-black uppercase transition-all text-center">
                 Capabilities
               </a>
             </div>
@@ -129,14 +129,14 @@ export default function Home() {
       <div id="capabilities"><Capabilities /></div>
 
       {/* Final Contact Section with Improved Styling */}
-      <section id="contact" className="bg-gray-50 py-24 border-t">
+      <section id="contact" className="bg-base py-24 border-t">
         <div className="container mx-auto px-6 text-center max-w-4xl">
-          <h2 className="text-5xl font-black text-slate-900 mb-6 uppercase tracking-tight">Built for the Mission.</h2>
-          <p className="text-gray-600 text-xl mb-12">
+          <h2 className="text-5xl font-black text-basetext mb-6 uppercase tracking-tight">Built for the Mission.</h2>
+          <p className="text-basetext/70 text-xl mb-12">
             Cognivix IT Solutions is currently accepting new partnerships for FY2026/27 capture cycles. 
           </p>
-          <div className="lg:max-w-2xl mx-auto bg-white p-120 shadow-2xl rounded-2xl border-t-1 border-red-200">
-             <h3 className="text-3xl font-black mb-8 text-slate-900 uppercase"></h3>
+          <div className="lg:max-w-2xl mx-auto bg-base p-120 shadow-2xl rounded-2xl border-t-1 border-red-200">
+             <h3 className="text-3xl font-black mb-8 text-basetext uppercase"></h3>
              <ContactForm />
           </div>
         </div>

@@ -32,22 +32,22 @@ export default function RecruitmentPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0c10] text-white pt-32 pb-20 px-4">
+    <div className="min-h-screen bg-secondary text-darktext pt-32 pb-20 px-4">
       <div className="max-w-7xl mx-auto">
         
         {/* Breadcrumb */}
         <div className="mb-8 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-500">
-          <Link href="/" className="hover:text-red-600">Home</Link>
+          <Link href="/" className="hover:text-primary">Home</Link>
           <span>/</span>
-          <Link href="/services" className="hover:text-red-600">Services</Link>
+          <Link href="/services" className="hover:text-primary">Services</Link>
           <span>/</span>
-          <span className="text-red-600">Recruitment & Staffing</span>
+          <span className="text-primary">Recruitment & Staffing</span>
         </div>
 
         {/* Header Section */}
-        <div className="mb-16 border-l-4 border-red-600 pl-6">
+        <div className="mb-16 border-l-4 border-primary pl-6">
           <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4">
-            Recruitment & <span className="text-red-600">Staffing</span>
+            Recruitment & <span className="text-primary">Staffing</span>
           </h1>
           <p className="text-slate-400 max-w-2xl text-sm md:text-lg leading-relaxed uppercase tracking-widest font-bold">
             Connecting federal agencies and enterprises with elite technical talent to drive mission success.
@@ -59,10 +59,10 @@ export default function RecruitmentPage() {
           {staffingServices.map((service, index) => (
             <div 
               key={index} 
-              className="bg-white/5 border border-white/10 p-8 rounded-2xl hover:border-red-600/50 transition-all group"
+              className="bg-base/5 border border-white/10 p-8 rounded-2xl hover:border-primary/50 transition-all group"
             >
               <div className="text-4xl mb-6">{service.icon}</div>
-              <h3 className="text-xl font-black uppercase tracking-widest mb-4 group-hover:text-red-600 transition-colors">
+              <h3 className="text-xl font-black uppercase tracking-widest mb-4 group-hover:text-primary transition-colors">
                 {service.title}
               </h3>
               <p className="text-slate-400 text-sm leading-loose">
@@ -73,7 +73,7 @@ export default function RecruitmentPage() {
         </div>
 
         {/* Methodology */}
-        <div className="bg-gradient-to-br from-[#12141a] to-[#0a0c10] border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+        <div className="bg-gradient-to-br from-[#12141a] to-secondary border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
           <div className="grid lg:grid-cols-2 gap-0">
             <div className="p-10 lg:p-16">
               <h2 className="text-2xl font-black uppercase tracking-widest mb-6">Strategic Talent Acquisition</h2>
@@ -84,14 +84,14 @@ export default function RecruitmentPage() {
               </p>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-red-600/20 flex items-center justify-center text-red-600 font-bold">01</div>
+                  <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary font-bold">01</div>
                   <div>
                     <h4 className="text-xs font-black uppercase tracking-widest mb-1">Precision Sourcing</h4>
                     <p className="text-[10px] text-slate-500 uppercase font-bold">Targeted candidate identification</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-red-600/20 flex items-center justify-center text-red-600 font-bold">02</div>
+                  <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary font-bold">02</div>
                   <div>
                     <h4 className="text-xs font-black uppercase tracking-widest mb-1">Rigorous Vetting</h4>
                     <p className="text-[10px] text-slate-500 uppercase font-bold">Technical & clearance validation</p>
@@ -99,14 +99,14 @@ export default function RecruitmentPage() {
                 </div>
               </div>
             </div>
-            <div className="relative bg-red-600/5 flex items-center justify-center p-12 border-l border-white/5">
+            <div className="relative bg-primary/5 flex items-center justify-center p-12 border-l border-white/5">
                <div className="text-center">
-                  <div className="inline-block p-4 rounded-full bg-red-600/10 mb-4">
-                    <div className="w-16 h-16 border-2 border-red-600 border-dashed rounded-full animate-spin-slow flex items-center justify-center">
-                      <span className="text-red-600 text-2xl font-black underline">R&S</span>
+                  <div className="inline-block p-4 rounded-full bg-primary/10 mb-4">
+                    <div className="w-16 h-16 border-2 border-primary border-dashed rounded-full animate-spin-slow flex items-center justify-center">
+                      <span className="text-primary text-2xl font-black underline">R&S</span>
                     </div>
                   </div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.4em] text-red-600">Elite IT Resources</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Elite IT Resources</p>
                </div>
             </div>
           </div>
@@ -116,7 +116,7 @@ export default function RecruitmentPage() {
         <div className="mt-20 flex flex-col items-center">
           <Link 
             href="/#contact" 
-            className="group relative inline-flex items-center gap-4 bg-red-600 px-12 py-4 rounded-lg font-black uppercase tracking-widest text-sm hover:bg-red-700 transition-all shadow-[0_0_30px_rgba(220,38,38,0.2)]"
+            className="group relative inline-flex items-center gap-4 bg-primary px-12 py-4 rounded-lg font-black uppercase tracking-widest text-sm hover:bg-primary/80 transition-all shadow-[0_0_30px_rgba(220,38,38,0.2)]"
           >
             Build Your Team
             <span className="group-hover:translate-x-1 transition-transform">→</span>
