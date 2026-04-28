@@ -8,7 +8,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   // LOGO URL
-  const logoUrl = "/logo.png"; 
+  const logoUrl = "/logo.png";
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -18,8 +18,8 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Home', href: '/' },
-    { 
-      name: 'About', 
+    {
+      name: 'About',
       href: '/about',
       subLinks: [
         { name: 'Our Mission', href: '/about#mission' },
@@ -27,19 +27,20 @@ export default function Navbar() {
         { name: 'Compliance', href: '/about#compliance' }
       ]
     },
-    { 
-      name: 'Services', 
+    {
+      name: 'Services',
       href: '/services',
       subLinks: [
         { name: 'Cybersecurity', href: '/services/cyber' },
         { name: 'Cloud Architecture', href: '/services/cloud' },
         { name: 'Technical Governance', href: '/services/governance' },
         { name: 'GIS & Remote Sensing', href: '/services/gis' },
-        { name: 'Proposal Engineering', href: '/services/proposal' }
+        { name: 'Proposal Engineering', href: '/services/proposal' },
+        { name: 'Recruitment & Staffing', href: '/services/recruitment' }
       ]
     },
-    { 
-      name: 'Sectors', 
+    {
+      name: 'Sectors',
       href: '/sectors',
       subLinks: [
         { name: 'Federal', href: '/sectors#federal' },
@@ -52,18 +53,17 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className={`fixed w-full z-[100] transition-all duration-300 ${
-      isScrolled || isOpen ? 'bg-[#0a0c10]/95 backdrop-blur-lg border-b border-white/10' : 'bg-transparent'
-    } py-4 md:py-6`}>
- {/* Increased padding slightly to accommodate larger logo */}
+    <nav className={`fixed w-full z-[100] transition-all duration-300 ${isScrolled || isOpen ? 'bg-[#0a0c10]/95 backdrop-blur-lg border-b border-white/10' : 'bg-transparent'
+      } py-4 md:py-6`}>
+      {/* Increased padding slightly to accommodate larger logo */}
       <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center relative">
-        
+
         {/* Brand Identity with Increased Logo Size */}
         <Link href="/" className="z-[110] flex items-center gap-4" onClick={() => setIsOpen(false)}>
-          <img 
-            src={logoUrl} 
-            alt="Cognivix Logo" 
-            className="h-12 md:h-16 w-auto object-contain brightness-0 invert transition-all" 
+          <img
+            src={logoUrl}
+            alt="Cognivix Logo"
+            className="h-12 md:h-16 w-auto object-contain brightness-0 invert transition-all"
           /> {/* Increased height from h-8/h-10 to h-12/h-16 */}
           <div className="flex flex-col">
             {/* <span className="text-base md:text-3xl font-black text-white tracking-tighter uppercase leading-none">
@@ -81,8 +81,8 @@ export default function Navbar() {
           <div className="hidden lg:flex gap-6 xl:gap-8 items-center mr-4">
             {navLinks.map((link) => (
               <div key={link.name} className="relative group">
-                <Link 
-                  href={link.href} 
+                <Link
+                  href={link.href}
                   className="text-[10px] xl:text-[11px] font-black uppercase tracking-widest text-slate-400 group-hover:text-red-600 transition-colors py-4"
                 >
                   {link.name}
@@ -107,8 +107,8 @@ export default function Navbar() {
             ))}
           </div>
 
-          <button 
-            onClick={() => setIsOpen(!isOpen)} 
+          <button
+            onClick={() => setIsOpen(!isOpen)}
             className="lg:hidden text-white p-2 hover:bg-white/5 rounded-lg transition-colors"
             aria-label="Toggle Menu"
           >
@@ -121,15 +121,14 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Slide-Out Menu */}
-        <div className={`lg:hidden fixed top-0 right-0 h-screen w-[280px] sm:w-[350px] bg-[#0a0c10] border-l border-white/10 shadow-2xl transition-transform duration-500 ease-in-out z-[105] p-10 pt-24 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}>
+        <div className={`lg:hidden fixed top-0 right-0 h-screen w-[280px] sm:w-[350px] bg-[#0a0c10] border-l border-white/10 shadow-2xl transition-transform duration-500 ease-in-out z-[105] p-10 pt-24 ${isOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}>
           <div className="flex flex-col gap-8">
             <span className="text-[11px] font-black text-red-600 uppercase tracking-[0.5em] mb-4">Navigational Matrix</span>
             {navLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                href={link.href} 
+              <Link
+                key={link.name}
+                href={link.href}
                 onClick={() => setIsOpen(false)}
                 className="text-xl font-black uppercase tracking-widest text-slate-300 hover:text-white transition-all"
               >
@@ -141,8 +140,8 @@ export default function Navbar() {
 
         {/* Mobile Backdrop Overlay */}
         {isOpen && (
-          <div 
-            className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]" 
+          <div
+            className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
             onClick={() => setIsOpen(false)}
           />
         )}
