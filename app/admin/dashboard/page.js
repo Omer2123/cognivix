@@ -23,7 +23,7 @@ export default function AdvancedDashboard() {
   const [editingId, setEditingId] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [hasConfigChanges, setHasConfigChanges] = useState(false);
+  const [initialConfig, setInitialConfig] = useState(null);
   const [config, setConfig] = useState({ 
     servicesGrayscaleBanners: true, 
     servicesBannerOpacity: 3,
@@ -76,6 +76,7 @@ export default function AdvancedDashboard() {
       const configData = await configRes.json();
       if (configData && typeof configData.servicesGrayscaleBanners !== 'undefined') {
         setConfig(configData);
+        setInitialConfig(configData);
       }
     } catch (e) {
       console.error('Failed to fetch config');
@@ -86,7 +87,6 @@ export default function AdvancedDashboard() {
 
   const updateConfig = (key, value) => {
     setConfig({ ...config, [key]: value });
-    setHasConfigChanges(true);
   };
 
   const saveConfig = async () => {
@@ -98,7 +98,7 @@ export default function AdvancedDashboard() {
       });
       if (res.ok) {
         alert('Global configurations saved successfully.');
-        setHasConfigChanges(false);
+        setInitialConfig(config);
       } else {
         alert('Failed to save configuration.');
       }
@@ -1254,20 +1254,22 @@ export default function AdvancedDashboard() {
               </table>
             </div>
           </div>
-        ) : activeTab === 'config' ? (
+        ) : activeTab === 'config' ? (() => {
+          const hasChanges = initialConfig && JSON.stringify(config) !== JSON.stringify(initialConfig);
+          return (
           <div className="max-w-4xl space-y-8">
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-black text-darktext uppercase tracking-tighter">Global Config</h3>
               <button 
                 onClick={saveConfig}
-                disabled={!hasConfigChanges}
+                disabled={!hasChanges}
                 className={`px-8 py-3 rounded-xl uppercase tracking-widest transition text-xs shadow-lg ${
-                  hasConfigChanges 
-                  ? 'bg-primary hover:bg-primary/80 text-darktext cursor-pointer shadow-primary/20' 
+                  hasChanges 
+                  ? 'bg-primary hover:bg-primary/80 text-darktext cursor-pointer shadow-primary/20 font-black' 
                   : 'bg-slate-800 text-slate-500 cursor-not-allowed opacity-50'
                 }`}
               >
-                {hasConfigChanges ? 'Save All Changes' : 'No Changes to Save'}
+                {hasChanges ? 'Save All Changes' : 'No Changes to Save'}
               </button>
             </div>
 
@@ -1468,7 +1470,8 @@ export default function AdvancedDashboard() {
               </div>
             </div>
           </div>
-        ) : (
+          );
+        })() : (
           <div className="max-w-md bg-accent p-10 rounded-2xl border border-slate-800">
             <h3 className="text-xl font-black text-darktext uppercase tracking-tighter mb-6">Update Password</h3>
             <form onSubmit={updatePassword} className="space-y-5">
