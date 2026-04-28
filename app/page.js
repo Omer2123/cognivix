@@ -46,6 +46,12 @@ function MissionSection() {
               <p><span className="text-darktext font-bold">CMMC Readiness</span> - Ready to support contractors in meeting Cyber Maturity Model Certifications.</p>
             </div>
           </div>
+
+          <div className="mt-12">
+            <a href="/about/mission" className="inline-flex items-center gap-3 text-primary font-black uppercase tracking-[0.2em] text-xs group">
+              Full Strategy <span className="group-hover:translate-x-2 transition-transform">→</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>

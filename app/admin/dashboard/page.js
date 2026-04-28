@@ -35,7 +35,8 @@ export default function AdvancedDashboard() {
     colorBase: '#ffffff',
     colorBaseText: '#0f172a',
     colorDark: '#020617',
-    colorDarkText: '#ffffff'
+    colorDarkText: '#ffffff',
+    leadershipTeam: []
   });
   const router = useRouter();
 
@@ -93,6 +94,42 @@ export default function AdvancedDashboard() {
 
   const updateConfig = (key, value) => {
     setConfig({ ...config, [key]: value });
+  };
+
+  const updateTeamMember = (index, key, value) => {
+    const updatedTeam = [...(config.leadershipTeam || [])];
+    updatedTeam[index] = { ...updatedTeam[index], [key]: value };
+    setConfig({ ...config, leadershipTeam: updatedTeam });
+  };
+
+  const addTeamMember = () => {
+    const updatedTeam = [...(config.leadershipTeam || []), { name: '', position: '', image: '' }];
+    setConfig({ ...config, leadershipTeam: updatedTeam });
+  };
+
+  const removeTeamMember = (index) => {
+    const updatedTeam = (config.leadershipTeam || []).filter((_, i) => i !== index);
+    setConfig({ ...config, leadershipTeam: updatedTeam });
+  };
+
+  const handleTeamPhotoUpload = async (index, file) => {
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const res = await fetch(`/api/admin/agencies/upload?filename=team_${Date.now()}_${file.name}`, {
+        method: 'POST',
+        body: file,
+      });
+      const data = await res.json();
+      if (data.success) {
+        updateTeamMember(index, 'image', data.url);
+      } else {
+        alert('Upload failed: ' + data.error);
+      }
+    } catch (err) {
+      alert('Upload error: ' + err.message);
+    }
+    setIsUploading(false);
   };
 
   const saveConfig = async () => {
@@ -1510,6 +1547,92 @@ export default function AdvancedDashboard() {
                     <span className="text-darktext font-black w-8 text-right">{config.servicesBannerOpacity ?? 3}</span>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Section: Leadership Team */}
+            <div className="bg-accent p-8 rounded-2xl border border-slate-800 shadow-xl">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-6">
+                <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest">Leadership Team</h4>
+                <button 
+                  onClick={addTeamMember}
+                  className="bg-primary/10 hover:bg-primary/20 text-primary text-[10px] font-black px-4 py-2 rounded-lg uppercase tracking-widest transition border border-primary/20"
+                >
+                  + Add Member
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                {(config.leadershipTeam || []).map((member, index) => (
+                  <div key={index} className="bg-dark border border-slate-800 p-6 rounded-xl relative group">
+                    <button 
+                      onClick={() => removeTeamMember(index)}
+                      className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-10"
+                      title="Remove Member"
+                    >
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+                      {/* Photo Column */}
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-slate-800 bg-secondary relative">
+                          {member.image ? (
+                            <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-slate-600">
+                              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                            </div>
+                          )}
+                          {isUploading && (
+                            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                              <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                            </div>
+                          )}
+                        </div>
+                        <label className="cursor-pointer bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-[9px] font-black uppercase tracking-widest text-slate-300 transition text-center w-full">
+                          {member.image ? 'Change Photo' : 'Upload Photo'}
+                          <input 
+                            type="file" 
+                            className="hidden" 
+                            accept="image/*"
+                            onChange={(e) => handleTeamPhotoUpload(index, e.target.files[0])}
+                          />
+                        </label>
+                      </div>
+                      
+                      {/* Info Columns */}
+                      <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5 block">Full Name</label>
+                          <input 
+                            type="text" 
+                            value={member.name}
+                            onChange={(e) => updateTeamMember(index, 'name', e.target.value)}
+                            className="w-full bg-secondary border border-slate-700 p-3 rounded-lg text-darktext text-sm outline-none focus:border-primary transition"
+                            placeholder="e.g. Marcus Thorne"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5 block">Position / Tagline</label>
+                          <input 
+                            type="text" 
+                            value={member.position}
+                            onChange={(e) => updateTeamMember(index, 'position', e.target.value)}
+                            className="w-full bg-secondary border border-slate-700 p-3 rounded-lg text-darktext text-sm outline-none focus:border-primary transition"
+                            placeholder="e.g. Founder"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                {(config.leadershipTeam || []).length === 0 && (
+                  <div className="text-center py-12 bg-dark/50 border border-dashed border-slate-800 rounded-xl">
+                    <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">No team members added yet</p>
+                  </div>
+                )}
               </div>
             </div>
 

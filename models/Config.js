@@ -36,7 +36,12 @@ const ConfigSchema = new mongoose.Schema({
   colorDarkText: {
     type: String,
     default: '#ffffff' // white
-  }
+  },
+  leadershipTeam: [{
+    name: { type: String, default: '' },
+    position: { type: String, default: '' },
+    image: { type: String, default: '' }
+  }]
 }, { timestamps: true });
 
 if (mongoose.models.Config) {
