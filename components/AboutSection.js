@@ -43,6 +43,12 @@ export default function AboutSection() {
                 </p>
               </div>
             </div>
+
+            <div className="pt-4">
+              <a href="/about" className="inline-flex items-center gap-2 text-primary font-black uppercase tracking-widest text-sm hover:gap-4 transition-all">
+                Read More About Cognivix <span>→</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

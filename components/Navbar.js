@@ -22,9 +22,11 @@ export default function Navbar() {
       name: 'About',
       href: '/about',
       subLinks: [
-        { name: 'Our Mission', href: '/about#mission' },
-        { name: 'Leadership', href: '/about#leadership' },
-        { name: 'Compliance', href: '/about#compliance' }
+        { name: 'Mission & Vision', href: '/about/mission' },
+        { name: 'Core Values', href: '/about/values' },
+        { name: 'Leadership', href: '/about/leadership' },
+        { name: 'Compliance & Certs', href: '/about/compliance' },
+        { name: 'Past Performance', href: '/about/performance' }
       ]
     },
     {

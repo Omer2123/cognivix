@@ -1,6 +1,6 @@
 import './globals.css';
 import SiteShell from '@/components/SiteShell';
-import { Analytics } from '@vercel/analytics/next';
+import { Analytics } from '@vercel/analytics/react';
 import dbConnect from '@/lib/dbConnect';
 import Config from '@/models/Config';
 
