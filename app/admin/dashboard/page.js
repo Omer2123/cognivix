@@ -523,12 +523,29 @@ export default function AdvancedDashboard() {
           >
             NAICS Management
           </button>
+          <div className="pt-6 pb-2 px-4">
+            <h4 className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em]">Global Config</h4>
+          </div>
           <button
-            onClick={() => setActiveTab('config')}
-            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'config' ? 'border-primary text-darktext bg-base/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
+            onClick={() => setActiveTab('config-branding')}
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'config-branding' ? 'border-primary text-darktext bg-base/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
               }`}
           >
-            Global Config
+            Site Branding
+          </button>
+          <button
+            onClick={() => setActiveTab('config-structural')}
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'config-structural' ? 'border-primary text-darktext bg-base/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
+              }`}
+          >
+            Structural Colors
+          </button>
+          <button
+            onClick={() => setActiveTab('config-services')}
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'config-services' ? 'border-primary text-darktext bg-base/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
+              }`}
+          >
+            Services & Banner
           </button>
           <button
             onClick={() => setActiveTab('security')}
@@ -1250,12 +1267,15 @@ export default function AdvancedDashboard() {
                 </tbody>
               </table>
             </div>
-          </div>
-        ) : activeTab === 'config' ? (
-          <div className="max-w-2xl space-y-8">
+                 ) : activeTab.startsWith('config-') ? (
+          <div className="max-w-4xl space-y-8">
             <div className="bg-accent p-10 rounded-2xl border border-slate-800">
               <div className="flex items-center justify-between mb-8">
-                <h3 className="text-xl font-black text-darktext uppercase tracking-tighter">Global Config</h3>
+                <h3 className="text-xl font-black text-darktext uppercase tracking-tighter">
+                  {activeTab === 'config-services' ? 'Services / Banner Config' : 
+                   activeTab === 'config-branding' ? 'Site Branding Config' : 
+                   'Structural Colors Config'}
+                </h3>
                 <button 
                   onClick={saveConfig}
                   className="bg-primary hover:bg-primary/80 text-darktext font-black px-6 py-2.5 rounded-lg uppercase tracking-widest transition text-[10px]"
@@ -1264,202 +1284,202 @@ export default function AdvancedDashboard() {
                 </button>
               </div>
 
-              {/* Section: Services / Banner */}
-              <div className="mb-8">
-                <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-3 mb-5">Services / Banner</h4>
-                <div className="space-y-6">
-                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
-                    <div>
-                      <label className="text-darktext font-bold block mb-1">Grayscale Services Banners</label>
-                    <button 
-                      onClick={() => updateConfig('servicesGrayscaleBanners', true)}
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
-                      title="Restore Default"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                    </button>
-                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Toggle grayscale filter on /services page headers</p>
+              {activeTab === 'config-services' && (
+                <div className="mb-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
+                      <div>
+                        <label className="text-darktext font-bold block mb-1">Grayscale Services Banners</label>
+                      <button 
+                        onClick={() => updateConfig('servicesGrayscaleBanners', true)}
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
+                        title="Restore Default"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      </button>
+                        <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Toggle grayscale filter on /services page headers</p>
+                      </div>
+                      <button
+                        onClick={() => updateConfig('servicesGrayscaleBanners', !config.servicesGrayscaleBanners)}
+                        className={`relative w-12 h-6 rounded-full transition-colors mt-1 ${config.servicesGrayscaleBanners ? 'bg-primary' : 'bg-slate-700'}`}
+                      >
+                        <div className={`absolute top-1 left-1 w-4 h-4 bg-base rounded-full transition-transform ${config.servicesGrayscaleBanners ? 'translate-x-6' : 'translate-x-0'}`} />
+                      </button>
                     </div>
-                    <button
-                      onClick={() => updateConfig('servicesGrayscaleBanners', !config.servicesGrayscaleBanners)}
-                      className={`relative w-12 h-6 rounded-full transition-colors ${config.servicesGrayscaleBanners ? 'bg-primary' : 'bg-slate-700'}`}
-                    >
-                      <div className={`absolute top-1 left-1 w-4 h-4 bg-base rounded-full transition-transform ${config.servicesGrayscaleBanners ? 'translate-x-6' : 'translate-x-0'}`} />
-                    </button>
+                    <div className="flex flex-col gap-3 bg-dark border border-slate-800 p-4 rounded-lg relative group">
+                      <div>
+                        <label className="text-darktext font-bold block mb-1">Services Banner Opacity</label>
+                      <button 
+                        onClick={() => updateConfig('servicesBannerOpacity', 3)}
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
+                        title="Restore Default"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      </button>
+                        <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Adjust the banner background opacity (1-10)</p>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <input 
+                          type="range" 
+                          min="1" 
+                          max="10" 
+                          value={config.servicesBannerOpacity ?? 3} 
+                          onChange={(e) => updateConfig('servicesBannerOpacity', parseInt(e.target.value))}
+                          className="w-full accent-primary cursor-pointer"
+                        />
+                        <span className="text-darktext font-black w-8 text-right">{config.servicesBannerOpacity ?? 3}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-3 bg-dark border border-slate-800 p-5 rounded-xl relative group">
-                    <div>
-                      <label className="text-darktext font-bold block mb-1">Services Banner Opacity</label>
-                    <button 
-                      onClick={() => updateConfig('servicesBannerOpacity', 3)}
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
-                      title="Restore Default"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                    </button>
-                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Adjust the banner background opacity (1-10)</p>
-                    </div>
-                    <div className="flex items-center gap-4">
+                </div>
+              )}
+
+              {activeTab === 'config-branding' && (
+                <div className="mb-8">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
+                      <div>
+                        <label className="text-darktext font-bold block mb-1">Primary Color</label>
+                      <button 
+                        onClick={() => updateConfig('colorPrimary', '#dc2626')}
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
+                        title="Restore Default"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      </button>
+                        <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Main accent color used for highlights and buttons</p>
+                      </div>
                       <input 
-                        type="range" 
-                        min="1" 
-                        max="10" 
-                        value={config.servicesBannerOpacity ?? 3} 
-                        onChange={(e) => updateConfig('servicesBannerOpacity', parseInt(e.target.value))}
-                        className="w-full accent-primary cursor-pointer"
+                        type="color" 
+                        value={config.colorPrimary || '#dc2626'} 
+                        onChange={(e) => updateConfig('colorPrimary', e.target.value)}
+                        className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
                       />
-                      <span className="text-darktext font-black w-8 text-right">{config.servicesBannerOpacity ?? 3}</span>
                     </div>
+                    <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
+                      <div>
+                        <label className="text-darktext font-bold block mb-1">Secondary Color</label>
+                      <button 
+                        onClick={() => updateConfig('colorSecondary', '#0a0c10')}
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
+                        title="Restore Default"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      </button>
+                        <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Main background color used across the site</p>
+                      </div>
+                      <input 
+                        type="color" 
+                        value={config.colorSecondary || '#0a0c10'} 
+                        onChange={(e) => updateConfig('colorSecondary', e.target.value)}
+                        className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
+                      />
+                    </div>
+                    <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
+                      <div>
+                        <label className="text-darktext font-bold block mb-1">Accent Color</label>
+                      <button 
+                        onClick={() => updateConfig('colorAccent', '#0f1218')}
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
+                        title="Restore Default"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      </button>
+                        <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Slightly lighter background used for cards and elements</p>
+                      </div>
+                      <input 
+                        type="color" 
+                        value={config.colorAccent || '#0f1218'} 
+                        onChange={(e) => updateConfig('colorAccent', e.target.value)}
+                        className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
+                      />
                     </div>
                   </div>
                 </div>
+              )}
 
-              {/* Section: Global Branding */}
-              <div className="mb-8">
-                <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-3 mb-5">Site / Branding</h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
-                    <div>
-                      <label className="text-darktext font-bold block mb-1">Primary Color</label>
-                    <button 
-                      onClick={() => updateConfig('colorPrimary', '#dc2626')}
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
-                      title="Restore Default"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                    </button>
-                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Main accent color used for highlights and buttons</p>
+              {activeTab === 'config-structural' && (
+                <div className="mb-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
+                      <div>
+                        <label className="text-darktext font-bold block mb-1">Base Background</label>
+                      <button 
+                        onClick={() => updateConfig('colorBase', '#ffffff')}
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
+                        title="Restore Default"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      </button>
+                        <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Main background for light sections (e.g. homepage)</p>
+                      </div>
+                      <input 
+                        type="color" 
+                        value={config.colorBase || '#ffffff'} 
+                        onChange={(e) => updateConfig('colorBase', e.target.value)}
+                        className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
+                      />
                     </div>
-                    <input 
-                      type="color" 
-                      value={config.colorPrimary || '#dc2626'} 
-                      onChange={(e) => updateConfig('colorPrimary', e.target.value)}
-                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
-                    />
-                  </div>
-                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
-                    <div>
-                      <label className="text-darktext font-bold block mb-1">Secondary Color</label>
-                    <button 
-                      onClick={() => updateConfig('colorSecondary', '#0a0c10')}
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
-                      title="Restore Default"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                    </button>
-                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Main background color used across the site</p>
+                    <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
+                      <div>
+                        <label className="text-darktext font-bold block mb-1">Base Text Color</label>
+                      <button 
+                        onClick={() => updateConfig('colorBaseText', '#0f172a')}
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
+                        title="Restore Default"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      </button>
+                        <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Text color for light sections</p>
+                      </div>
+                      <input 
+                        type="color" 
+                        value={config.colorBaseText || '#0f172a'} 
+                        onChange={(e) => updateConfig('colorBaseText', e.target.value)}
+                        className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
+                      />
                     </div>
-                    <input 
-                      type="color" 
-                      value={config.colorSecondary || '#0a0c10'} 
-                      onChange={(e) => updateConfig('colorSecondary', e.target.value)}
-                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
-                    />
-                  </div>
-                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
-                    <div>
-                      <label className="text-darktext font-bold block mb-1">Accent Color</label>
-                    <button 
-                      onClick={() => updateConfig('colorAccent', '#0f1218')}
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
-                      title="Restore Default"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                    </button>
-                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Slightly lighter background used for cards and elements</p>
+                    <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
+                      <div>
+                        <label className="text-darktext font-bold block mb-1">Dark Background</label>
+                      <button 
+                        onClick={() => updateConfig('colorDark', '#0f172a')}
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
+                        title="Restore Default"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      </button>
+                        <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Main background for dark sections</p>
+                      </div>
+                      <input 
+                        type="color" 
+                        value={config.colorDark || '#0f172a'} 
+                        onChange={(e) => updateConfig('colorDark', e.target.value)}
+                        className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
+                      />
                     </div>
-                    <input 
-                      type="color" 
-                      value={config.colorAccent || '#0f1218'} 
-                      onChange={(e) => updateConfig('colorAccent', e.target.value)}
-                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Section: Structural Colors */}
-              <div className="mb-8">
-                <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-3 mb-5">Structural Colors</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
-                    <div>
-                      <label className="text-darktext font-bold block mb-1">Base Background</label>
-                    <button 
-                      onClick={() => updateConfig('colorBase', '#ffffff')}
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
-                      title="Restore Default"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                    </button>
-                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Main background for light sections (e.g. homepage)</p>
+                    <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
+                      <div>
+                        <label className="text-darktext font-bold block mb-1">Dark Text Color</label>
+                      <button 
+                        onClick={() => updateConfig('colorDarkText', '#ffffff')}
+                        className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
+                        title="Restore Default"
+                      >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                      </button>
+                        <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Text color for dark sections</p>
+                      </div>
+                      <input 
+                        type="color" 
+                        value={config.colorDarkText || '#ffffff'} 
+                        onChange={(e) => updateConfig('colorDarkText', e.target.value)}
+                        className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
+                      />
                     </div>
-                    <input 
-                      type="color" 
-                      value={config.colorBase || '#ffffff'} 
-                      onChange={(e) => updateConfig('colorBase', e.target.value)}
-                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
-                    />
-                  </div>
-                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
-                    <div>
-                      <label className="text-darktext font-bold block mb-1">Base Text Color</label>
-                    <button 
-                      onClick={() => updateConfig('colorBaseText', '#0f172a')}
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
-                      title="Restore Default"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                    </button>
-                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Text color for light sections</p>
-                    </div>
-                    <input 
-                      type="color" 
-                      value={config.colorBaseText || '#0f172a'} 
-                      onChange={(e) => updateConfig('colorBaseText', e.target.value)}
-                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
-                    />
-                  </div>
-                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
-                    <div>
-                      <label className="text-darktext font-bold block mb-1">Dark Background</label>
-                    <button 
-                      onClick={() => updateConfig('colorDark', '#0f172a')}
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
-                      title="Restore Default"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                    </button>
-                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Main background for dark sections</p>
-                    </div>
-                    <input 
-                      type="color" 
-                      value={config.colorDark || '#0f172a'} 
-                      onChange={(e) => updateConfig('colorDark', e.target.value)}
-                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
-                    />
-                  </div>
-                  <div className="flex items-start justify-between bg-dark border border-slate-800 p-4 rounded-lg relative group">
-                    <div>
-                      <label className="text-darktext font-bold block mb-1">Dark Text Color</label>
-                    <button 
-                      onClick={() => updateConfig('colorDarkText', '#ffffff')}
-                      className="absolute top-2 right-2 w-6 h-6 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10"
-                      title="Restore Default"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                    </button>
-                      <p className="text-[9px] text-slate-500 uppercase tracking-widest mt-1 pr-4 leading-relaxed">Text color for dark sections</p>
-                    </div>
-                    <input 
-                      type="color" 
-                      value={config.colorDarkText || '#ffffff'} 
-                      onChange={(e) => updateConfig('colorDarkText', e.target.value)}
-                      className="w-8 h-8 rounded cursor-pointer border-none outline-none bg-transparent flex-shrink-0 mt-1"
-                    />
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         ) : (
