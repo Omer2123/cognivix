@@ -1,6 +1,9 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+const BlogEditor = dynamic(() => import('@/components/BlogEditor'), { ssr: false });
 
 export default function AdvancedDashboard() {
   const [inquiries, setInquiries] = useState([]);
@@ -10,6 +13,10 @@ export default function AdvancedDashboard() {
   const [resources, setResources] = useState([]);
   const [applications, setApplications] = useState([]);
   const [naicsCodes, setNaicsCodes] = useState([]);
+  const [blogs, setBlogs] = useState([]);
+  const [newBlog, setNewBlog] = useState({ title: '', slug: '', excerpt: '', content: '', coverImage: '', author: '', tags: '', published: false });
+  const [blogCoverFile, setBlogCoverFile] = useState(null);
+  const [blogEditingId, setBlogEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('logs');
   const [newPassword, setNewPassword] = useState('');
@@ -88,6 +95,10 @@ export default function AdvancedDashboard() {
     const themesRes = await fetch('/api/admin/themes');
     const themesData = await themesRes.json();
     if (themesData.success) setThemePresets(themesData.data);
+
+    const blogsRes = await fetch('/api/admin/blogs');
+    const blogsData = await blogsRes.json();
+    if (blogsData.success) setBlogs(blogsData.data);
 
     setLoading(false);
   };
@@ -605,6 +616,13 @@ export default function AdvancedDashboard() {
               }`}
           >
             NAICS Management
+          </button>
+          <button
+            onClick={() => setActiveTab('blogs')}
+            className={`w-full text-left px-4 py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition border-l-2 ${activeTab === 'blogs' ? 'border-primary text-darktext bg-base/5' : 'border-transparent hover:bg-slate-800/50 text-slate-500'
+              }`}
+          >
+            Blog Management
           </button>
           <button
             onClick={() => setActiveTab('config')}
@@ -1328,6 +1346,245 @@ export default function AdvancedDashboard() {
                       <td colSpan={3} className="p-10 text-center text-slate-500 text-xs font-bold uppercase tracking-widest">
                         No sectors defined.
                       </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : activeTab === 'blogs' ? (
+          <div className="max-w-4xl space-y-8">
+            <h3 className="text-xl font-black text-darktext uppercase tracking-tighter">Blog Management</h3>
+
+            {/* Blog Form */}
+            <div className="bg-accent p-8 rounded-2xl border border-slate-800 shadow-xl space-y-4">
+              <h4 className="text-sm font-black text-slate-400 uppercase tracking-widest border-b border-slate-800 pb-3 mb-6">
+                {blogEditingId ? 'Edit Post' : 'New Post'}
+              </h4>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Title *</label>
+                  <input
+                    type="text"
+                    value={newBlog.title}
+                    onChange={(e) => {
+                      const title = e.target.value;
+                      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                      setNewBlog(prev => ({ ...prev, title, ...(blogEditingId ? {} : { slug }) }));
+                    }}
+                    placeholder="Post title"
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-darktext text-sm focus:outline-none focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Slug *</label>
+                  <input
+                    type="text"
+                    value={newBlog.slug}
+                    onChange={(e) => setNewBlog(prev => ({ ...prev, slug: e.target.value }))}
+                    placeholder="url-friendly-slug"
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-darktext text-sm focus:outline-none focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Author</label>
+                  <input
+                    type="text"
+                    value={newBlog.author}
+                    onChange={(e) => setNewBlog(prev => ({ ...prev, author: e.target.value }))}
+                    placeholder="Author name"
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-darktext text-sm focus:outline-none focus:border-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Tags (comma-separated)</label>
+                  <input
+                    type="text"
+                    value={newBlog.tags}
+                    onChange={(e) => setNewBlog(prev => ({ ...prev, tags: e.target.value }))}
+                    placeholder="Cybersecurity, Cloud, GIS"
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-darktext text-sm focus:outline-none focus:border-primary"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Excerpt</label>
+                <textarea
+                  value={newBlog.excerpt}
+                  onChange={(e) => setNewBlog(prev => ({ ...prev, excerpt: e.target.value }))}
+                  placeholder="Short summary shown on the blog listing page"
+                  rows={2}
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-darktext text-sm focus:outline-none focus:border-primary resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Cover Image</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setBlogCoverFile(e.target.files[0])}
+                    className="text-slate-400 text-xs"
+                  />
+                  {newBlog.coverImage && (
+                    <img src={newBlog.coverImage} alt="cover" className="w-16 h-10 object-cover rounded border border-slate-700" />
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Content</label>
+                <BlogEditor
+                  value={newBlog.content}
+                  onChange={(html) => setNewBlog(prev => ({ ...prev, content: html }))}
+                />
+              </div>
+
+              <div className="flex items-center gap-3 pt-2">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={newBlog.published}
+                    onChange={(e) => setNewBlog(prev => ({ ...prev, published: e.target.checked }))}
+                    className="w-4 h-4 accent-primary"
+                  />
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Published</span>
+                </label>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={async () => {
+                    if (!newBlog.title || !newBlog.slug) return alert('Title and slug are required');
+                    setIsUploading(true);
+                    let coverImage = newBlog.coverImage;
+                    if (blogCoverFile) {
+                      const uploadRes = await fetch(`/api/admin/blogs/upload?filename=blog_${Date.now()}_${blogCoverFile.name}`, {
+                        method: 'POST',
+                        body: blogCoverFile,
+                      });
+                      const uploadData = await uploadRes.json();
+                      if (uploadData.success) coverImage = uploadData.url;
+                    }
+                    const tags = newBlog.tags ? newBlog.tags.split(',').map(t => t.trim()).filter(Boolean) : [];
+                    const payload = { ...newBlog, tags, coverImage };
+                    const res = await fetch('/api/admin/blogs', {
+                      method: blogEditingId ? 'PUT' : 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(blogEditingId ? { id: blogEditingId, ...payload } : payload),
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                      if (blogEditingId) {
+                        setBlogs(prev => prev.map(b => b._id === blogEditingId ? data.data : b));
+                        setBlogEditingId(null);
+                      } else {
+                        setBlogs(prev => [data.data, ...prev]);
+                      }
+                      setNewBlog({ title: '', slug: '', excerpt: '', content: '', coverImage: '', author: '', tags: '', published: false });
+                      setBlogCoverFile(null);
+                    } else {
+                      alert(data.error || 'Failed to save blog post');
+                    }
+                    setIsUploading(false);
+                  }}
+                  disabled={isUploading}
+                  className="bg-primary hover:bg-primary/80 px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest text-darktext transition disabled:opacity-50"
+                >
+                  {isUploading ? 'Saving...' : blogEditingId ? 'Update Post' : 'Publish Post'}
+                </button>
+                {blogEditingId && (
+                  <button
+                    onClick={() => {
+                      setBlogEditingId(null);
+                      setNewBlog({ title: '', slug: '', excerpt: '', content: '', coverImage: '', author: '', tags: '', published: false });
+                      setBlogCoverFile(null);
+                    }}
+                    className="bg-slate-700 hover:bg-slate-600 px-6 py-2.5 rounded-lg text-xs font-black uppercase tracking-widest text-slate-300 transition"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Blog List */}
+            <div className="bg-accent rounded-2xl border border-slate-800 shadow-xl overflow-hidden">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-slate-800">
+                    <th className="text-left px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-widest">Title</th>
+                    <th className="text-left px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Author</th>
+                    <th className="text-left px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-widest">Status</th>
+                    <th className="text-left px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Date</th>
+                    <th className="px-6 py-4" />
+                  </tr>
+                </thead>
+                <tbody>
+                  {blogs.map(blog => (
+                    <tr key={blog._id} className="border-b border-slate-800/50 hover:bg-slate-800/30 transition">
+                      <td className="px-6 py-4 text-darktext font-bold text-xs">
+                        {blog.title}
+                        {blog.tags?.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {blog.tags.map(tag => (
+                              <span key={tag} className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">{tag}</span>
+                            ))}
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-slate-400 text-xs hidden md:table-cell">{blog.author || '—'}</td>
+                      <td className="px-6 py-4">
+                        <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-full ${blog.published ? 'bg-green-500/10 text-green-400' : 'bg-slate-700 text-slate-400'}`}>
+                          {blog.published ? 'Published' : 'Draft'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-slate-500 text-xs hidden md:table-cell">{new Date(blog.createdAt).toLocaleDateString()}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2 justify-end">
+                          <button
+                            onClick={() => {
+                              setBlogEditingId(blog._id);
+                              setNewBlog({
+                                title: blog.title,
+                                slug: blog.slug,
+                                excerpt: blog.excerpt || '',
+                                content: blog.content || '',
+                                coverImage: blog.coverImage || '',
+                                author: blog.author || '',
+                                tags: (blog.tags || []).join(', '),
+                                published: blog.published,
+                              });
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            className="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded font-bold text-slate-300 transition"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={async () => {
+                              if (!confirm('Delete this blog post?')) return;
+                              await fetch('/api/admin/blogs', {
+                                method: 'DELETE',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ id: blog._id }),
+                              });
+                              setBlogs(prev => prev.filter(b => b._id !== blog._id));
+                            }}
+                            className="text-xs bg-red-900/40 hover:bg-red-900/70 px-3 py-1.5 rounded font-bold text-red-400 transition"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {blogs.length === 0 && (
+                    <tr>
+                      <td colSpan={5} className="px-6 py-10 text-center text-slate-500 text-xs uppercase tracking-widest">No blog posts yet</td>
                     </tr>
                   )}
                 </tbody>
