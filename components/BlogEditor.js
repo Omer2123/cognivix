@@ -33,8 +33,10 @@ export default function BlogEditor({ value, onChange }) {
   });
 
   useEffect(() => {
-    if (editor && value === '') {
-      editor.commands.clearContent();
+    if (!editor) return;
+    const current = editor.getHTML();
+    if (value !== current) {
+      editor.commands.setContent(value || '');
     }
   }, [value, editor]);
 
