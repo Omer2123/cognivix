@@ -15,8 +15,8 @@ export default function BlogsPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-dark text-darktext">
-      <section className="max-w-6xl mx-auto px-6 py-24">
+    <main className="min-h-screen bg-dark text-darktext pt-40 pb-20 px-6">
+      <section className="max-w-6xl mx-auto">
         <div className="mb-14">
           <p className="text-xs font-black uppercase tracking-widest text-primary mb-2">Insights</p>
           <h1 className="text-5xl font-black uppercase tracking-tighter text-darktext">Blog</h1>

@@ -33,12 +33,12 @@ export default function BlogPostPage() {
   return (
     <main className="min-h-screen bg-dark text-darktext">
       {blog.coverImage && (
-        <div className="w-full h-72 md:h-96 overflow-hidden">
+        <div className="w-full h-72 md:h-96 overflow-hidden mt-28">
           <img src={blog.coverImage} alt={blog.title} className="w-full h-full object-cover" />
         </div>
       )}
 
-      <article className="max-w-3xl mx-auto px-6 py-16">
+      <article className={`max-w-3xl mx-auto px-6 pb-16 ${blog.coverImage ? 'pt-10' : 'pt-40'}`}>
         {blog.tags?.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
             {blog.tags.map(tag => (
